@@ -16,7 +16,7 @@ const NAV_ITEMS = [
 export const Sidebar = ({ className }: Props) => {
   return (
     <div className={cn(
-      "flex h-full lg:w-[256px] lg:fixed left-0 top-0",
+      "flex h-full md:w-[256px] md:fixed left-0 top-0",
       "flex-col border-r-2 border-gray-100 bg-white",
       className,
     )}>
@@ -67,7 +67,7 @@ export const Sidebar = ({ className }: Props) => {
               {/* Online dot */}
               <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-[#58CC02] border-2 border-white" />
             </div>
-            <div className="flex-1 min-w-0 hidden lg:block">
+            <div className="flex-1 min-w-0 hidden md:block">
               <p className="font-extrabold text-[#3C3C3C] text-sm truncate">Learner</p>
               <p className="text-[#AFAFAF] text-xs font-bold truncate">View Profile →</p>
             </div>

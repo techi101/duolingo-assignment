@@ -41,14 +41,14 @@ export const SidebarItem = ({ label, iconSrc, href }: Props) => {
         />
       </div>
       <span className={cn(
-        "hidden lg:block",
+        "hidden md:block",
         active ? "text-[#58CC02]" : "text-[#3C3C3C]",
       )}>
         {label}
       </span>
       {/* Active indicator dot for mobile */}
       {active && (
-        <div className="lg:hidden ml-auto w-1.5 h-1.5 rounded-full bg-[#58CC02]" />
+        <div className="md:hidden ml-auto w-1.5 h-1.5 rounded-full bg-[#58CC02]" />
       )}
     </Link>
   );
