@@ -35,9 +35,15 @@ export const Card = ({
   const handleClick = useCallback(() => {
     if (disabled) return;
 
-    controls.play();
+    if (audioSrc) {
+      controls.play();
+    } else {
+      const utterance = new SpeechSynthesisUtterance(text);
+      window.speechSynthesis.speak(utterance);
+    }
+
     onClick();
-  }, [disabled, onClick, controls]);
+  }, [disabled, onClick, controls, audioSrc, text]);
 
   useKey(shortcut, handleClick, {}, [handleClick]);
 
