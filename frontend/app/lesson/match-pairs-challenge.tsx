@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils";
 import { CheckCircle2 } from "lucide-react";
 import { ChallengeOption } from "@/db/queries";
 
+import { useAudio } from "react-use";
+
 type Pair = { word: string; translation: string };
 
 type Props = {
@@ -12,22 +14,27 @@ type Props = {
   status: "correct" | "wrong" | "none";
   disabled?: boolean;
   onComplete: (allMatched: boolean) => void;
+  onWrongPair: () => void;
 };
 
-export const MatchPairsChallenge = ({ options, status, disabled, onComplete }: Props) => {
-  // Parse "word|||translation" format
+export const MatchPairsChallenge = ({ options, status, disabled, onComplete, onWrongPair }: Props) => {
   const pairs: Pair[] = options.map((o) => {
     const [word, translation] = o.text.split("|||");
     return { word, translation };
   });
 
-  // Build shuffled word bank (left = words, right = translations)
   const [leftItems] = useState<string[]>(() => shuffle(pairs.map((p) => p.word)));
   const [rightItems] = useState<string[]>(() => shuffle(pairs.map((p) => p.translation)));
 
   const [selectedLeft, setSelectedLeft] = useState<string | null>(null);
   const [selectedRight, setSelectedRight] = useState<string | null>(null);
-  const [matched, setMatched] = useState<Set<string>>(new Set()); // matched words
+  const [matched, setMatched] = useState<Set<string>>(new Set());
+  
+  // Track incorrect matches for visual feedback
+  const [incorrectPair, setIncorrectPair] = useState<{left: string, right: string} | null>(null);
+
+  const [correctAudio, _c, correctControls] = useAudio({ src: "/correct.wav" });
+  const [incorrectAudio, _i, incorrectControls] = useAudio({ src: "/incorrect.wav" });
 
   const correctMap = new Map(pairs.map((p) => [p.word, p.translation]));
 
@@ -35,23 +42,30 @@ export const MatchPairsChallenge = ({ options, status, disabled, onComplete }: P
     if (selectedLeft && selectedRight) {
       const isCorrect = correctMap.get(selectedLeft) === selectedRight;
       if (isCorrect) {
+        correctControls.play();
         setMatched((prev) => {
           const next = new Set(prev);
           next.add(selectedLeft);
-          // check if all matched
           if (next.size === pairs.length) {
-            setTimeout(() => onComplete(true), 300);
+            onComplete(true);
           }
           return next;
         });
-      }
-      // Brief delay then clear selection
-      setTimeout(() => {
         setSelectedLeft(null);
         setSelectedRight(null);
-      }, 500);
+      } else {
+        incorrectControls.play();
+        onWrongPair();
+        setIncorrectPair({ left: selectedLeft, right: selectedRight });
+        
+        setTimeout(() => {
+          setIncorrectPair(null);
+          setSelectedLeft(null);
+          setSelectedRight(null);
+        }, 800);
+      }
     }
-  }, [selectedLeft, selectedRight]);
+  }, [selectedLeft, selectedRight, correctMap, pairs.length, onComplete, correctControls, incorrectControls, onWrongPair]);
 
   const isWordMatched = (word: string) => matched.has(word);
   const isTranslationMatched = (trans: string) =>
@@ -59,21 +73,25 @@ export const MatchPairsChallenge = ({ options, status, disabled, onComplete }: P
 
   return (
     <div className="grid grid-cols-2 gap-3 w-full max-w-[600px] mx-auto">
-      {/* Left column — Spanish words */}
+      {correctAudio}
+      {incorrectAudio}
       <div className="flex flex-col gap-3">
         {leftItems.map((word) => {
           const isMatched = isWordMatched(word);
           const isSelected = selectedLeft === word;
+          const isError = incorrectPair?.left === word;
           return (
             <button
               key={word}
-              disabled={disabled || isMatched}
+              disabled={disabled || isMatched || !!incorrectPair}
               onClick={() => !isMatched && setSelectedLeft(isSelected ? null : word)}
               className={cn(
                 "relative px-4 py-3 rounded-2xl border-2 border-b-4 font-bold text-sm transition-all duration-150",
                 "hover:scale-[1.02] active:scale-[0.98] active:border-b-2",
                 isMatched
                   ? "border-green-300 bg-green-50 text-green-600 pointer-events-none opacity-60"
+                  : isError
+                  ? "border-rose-300 bg-rose-50 text-rose-500 pointer-events-none"
                   : isSelected
                   ? "border-sky-400 bg-sky-50 text-sky-600"
                   : "border-gray-200 bg-white text-neutral-700 hover:border-gray-300",
@@ -88,21 +106,23 @@ export const MatchPairsChallenge = ({ options, status, disabled, onComplete }: P
         })}
       </div>
 
-      {/* Right column — English translations */}
       <div className="flex flex-col gap-3">
         {rightItems.map((trans) => {
           const isMatched = isTranslationMatched(trans);
           const isSelected = selectedRight === trans;
+          const isError = incorrectPair?.right === trans;
           return (
             <button
               key={trans}
-              disabled={disabled || isMatched}
+              disabled={disabled || isMatched || !!incorrectPair}
               onClick={() => !isMatched && setSelectedRight(isSelected ? null : trans)}
               className={cn(
                 "px-4 py-3 rounded-2xl border-2 border-b-4 font-bold text-sm transition-all duration-150",
                 "hover:scale-[1.02] active:scale-[0.98] active:border-b-2",
                 isMatched
                   ? "border-purple-300 bg-purple-50 text-purple-600 pointer-events-none opacity-60"
+                  : isError
+                  ? "border-rose-300 bg-rose-50 text-rose-500 pointer-events-none"
                   : isSelected
                   ? "border-yellow-400 bg-yellow-50 text-yellow-600"
                   : "border-gray-200 bg-white text-neutral-700 hover:border-gray-300",

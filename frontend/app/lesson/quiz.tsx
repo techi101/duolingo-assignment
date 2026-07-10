@@ -303,10 +303,21 @@ export const Quiz = ({
                   disabled={pending || status !== "none"}
                   onComplete={(allMatched) => {
                     setMatchPairsComplete(allMatched);
-                    if (allMatched && status === "none") {
-                      // auto-trigger continue after a tick
-                      setTimeout(() => onContinue(), 200);
-                    }
+                  }}
+                  onWrongPair={() => {
+                    startTransition(() => {
+                      reduceHearts(challenge.id)
+                        .then((response) => {
+                          if (response?.error === "hearts") {
+                            openHeartsModal();
+                            return;
+                          }
+                          if (!response?.error) {
+                            setHearts((prev) => Math.max(prev - 1, 0));
+                          }
+                        })
+                        .catch(() => toast.error("Something went wrong. Please try again."));
+                    });
                   }}
                 />
               )}
@@ -318,8 +329,7 @@ export const Quiz = ({
         disabled={pending || (!hasAnswer() && status === "none")}
         status={status}
         onCheck={onContinue}
-        // Hide the check button for MATCH_PAIRS (it auto-completes)
-        hideCheck={challenge.type === "MATCH_PAIRS" && status === "none"}
+        hideCheck={challenge.type === "MATCH_PAIRS" && !matchPairsComplete}
       />
     </>
   );
