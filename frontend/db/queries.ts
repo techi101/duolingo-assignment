@@ -1,7 +1,7 @@
 "use server";
 // db/queries.ts – all data fetching from the FastAPI backend
 
-const API = "http://localhost:8000";
+const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

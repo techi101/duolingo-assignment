@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-const API = "http://localhost:8000";
+const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 export const upsertChallengeProgress = async (challengeId: number) => {
   try {
