@@ -64,15 +64,15 @@ export const SettingsClient = () => {
             const currentPref = voicePreferences[lang.code];
 
             return (
-              <div key={lang.code} className="flex flex-col gap-2 border-b-2 border-gray-100 pb-6 last:border-0 last:pb-0">
-                <h3 className="font-extrabold text-lg text-neutral-800">{lang.name}</h3>
+              <div key={lang.code} className="flex flex-col gap-2 border-b-2 border-gray-100 dark:border-slate-700 pb-6 last:border-0 last:pb-0">
+                <h3 className="font-extrabold text-lg text-neutral-800 dark:text-neutral-200">{lang.name}</h3>
                 
                 {availableVoices.length === 0 ? (
                   <p className="text-sm text-neutral-500 italic">No native voices installed for this language.</p>
                 ) : (
                   <div className="flex flex-col md:flex-row md:items-center gap-4">
                     <select
-                      className="flex-1 p-3 border-2 border-gray-200 rounded-xl font-medium bg-gray-50 focus:border-[#1CB0F6] outline-none transition-colors"
+                      className="flex-1 p-3 border-2 border-gray-200 dark:border-slate-700 rounded-xl font-medium bg-gray-50 dark:bg-slate-800 dark:text-neutral-200 focus:border-[#1CB0F6] outline-none transition-colors"
                       value={currentPref || ""}
                       onChange={(e) => setVoicePreference(lang.code, e.target.value)}
                     >

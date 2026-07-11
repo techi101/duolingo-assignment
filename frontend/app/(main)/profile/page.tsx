@@ -22,47 +22,47 @@ const ProfilePage = async () => {
     <div className="flex flex-row-reverse gap-[48px] px-6">
       {/* Sticky right panel */}
       <StickyWrapper>
-        <div className="rounded-2xl border-2 border-gray-100 overflow-hidden mb-6">
-          <div className="flex border-b-2 border-gray-100">
+        <div className="rounded-2xl border-2 border-gray-100 dark:border-slate-800 overflow-hidden mb-6">
+          <div className="flex border-b-2 border-gray-100 dark:border-slate-800">
             <div className="flex-1 py-4 text-center font-bold text-sm text-[#1CB0F6] border-b-2 border-[#1CB0F6] cursor-pointer">
               FOLLOWING
             </div>
-            <div className="flex-1 py-4 text-center font-bold text-sm text-neutral-400 hover:bg-gray-50 cursor-pointer">
+            <div className="flex-1 py-4 text-center font-bold text-sm text-neutral-400 hover:bg-gray-50 dark:hover:bg-slate-800 cursor-pointer">
               FOLLOWERS
             </div>
           </div>
           <div className="p-6 flex flex-col items-center text-center">
-            <div className="w-48 h-32 bg-gray-100 rounded-xl mb-4 flex items-center justify-center text-neutral-300">
+            <div className="w-48 h-32 bg-gray-100 dark:bg-slate-800 rounded-xl mb-4 flex items-center justify-center text-neutral-300">
               <Search className="w-10 h-10" />
             </div>
-            <p className="text-neutral-500 font-medium text-lg leading-snug">
+            <p className="text-neutral-500 dark:text-neutral-400 font-medium text-lg leading-snug">
               Learning is more fun and effective when you connect with others.
             </p>
           </div>
         </div>
 
-        <div className="rounded-2xl border-2 border-gray-100 p-6 flex flex-col gap-4">
-          <h3 className="font-bold text-neutral-800 text-lg">
+        <div className="rounded-2xl border-2 border-gray-100 dark:border-slate-800 p-6 flex flex-col gap-4">
+          <h3 className="font-bold text-neutral-800 dark:text-neutral-200 text-lg">
             Add friends
           </h3>
           <div className="flex items-center justify-between cursor-pointer group">
             <div className="flex items-center gap-x-4">
-              <div className="bg-gray-100 rounded-full p-3 group-hover:bg-gray-200 transition-colors">
+              <div className="bg-gray-100 dark:bg-slate-800 rounded-full p-3 group-hover:bg-gray-200 dark:group-hover:bg-slate-700 transition-colors">
                 <Search className="w-6 h-6 text-neutral-400" />
               </div>
-              <span className="font-bold text-neutral-700">Find friends</span>
+              <span className="font-bold text-neutral-700 dark:text-neutral-300">Find friends</span>
             </div>
             <div className="text-neutral-400 font-bold group-hover:text-neutral-500 transition-colors">
               {'>'}
             </div>
           </div>
-          <div className="h-[2px] w-full bg-gray-100" />
+          <div className="h-[2px] w-full bg-gray-100 dark:bg-slate-700" />
           <div className="flex items-center justify-between cursor-pointer group">
             <div className="flex items-center gap-x-4">
-              <div className="bg-gray-100 rounded-full p-3 group-hover:bg-gray-200 transition-colors">
+              <div className="bg-gray-100 dark:bg-slate-800 rounded-full p-3 group-hover:bg-gray-200 dark:group-hover:bg-slate-700 transition-colors">
                 <Mail className="w-6 h-6 text-neutral-400" />
               </div>
-              <span className="font-bold text-neutral-700">Invite friends</span>
+              <span className="font-bold text-neutral-700 dark:text-neutral-300">Invite friends</span>
             </div>
             <div className="text-neutral-400 font-bold group-hover:text-neutral-500 transition-colors">
               {'>'}
@@ -100,11 +100,11 @@ const ProfilePage = async () => {
         </div>
 
         {/* Profile Info */}
-        <div className="flex items-start justify-between mb-6 border-b-2 border-gray-100 pb-6">
+        <div className="flex items-start justify-between mb-6 border-b-2 border-gray-100 dark:border-slate-800 pb-6">
           <div className="flex flex-col gap-1">
-            <h1 className="text-3xl font-black text-neutral-800">{profile.username}</h1>
-            <p className="text-neutral-500 font-medium">{profile.username.toLowerCase().replace(" ", "")}970605</p>
-            <p className="text-neutral-500 font-medium mt-1">Joined {joinDate}</p>
+            <h1 className="text-3xl font-black text-neutral-800 dark:text-neutral-100">{profile.username}</h1>
+            <p className="text-neutral-500 dark:text-neutral-400 font-medium">{profile.username.toLowerCase().replace(" ", "")}970605</p>
+            <p className="text-neutral-500 dark:text-neutral-400 font-medium mt-1">Joined {joinDate}</p>
             <div className="flex items-center gap-x-4 mt-3">
               <span className="text-[#1CB0F6] font-bold cursor-pointer hover:text-[#1899D6]">
                 0 Following
@@ -130,45 +130,38 @@ const ProfilePage = async () => {
 
         {/* Statistics Section */}
         <div className="w-full">
-          <h2 className="text-2xl font-bold text-neutral-800 mb-4">Statistics</h2>
+          <h2 className="text-2xl font-bold text-neutral-800 dark:text-neutral-100 mb-4">Statistics</h2>
           <div className="grid grid-cols-2 gap-4">
-            {/* Streak Stat */}
-            <div className="border-2 border-gray-200 rounded-2xl p-4 flex items-start gap-x-4">
+            <div className="border-2 border-gray-200 dark:border-slate-700 rounded-2xl p-4 flex items-start gap-x-4">
               <Flame className="w-8 h-8 text-[#FF9600] fill-[#FF9600] mt-1" />
               <div className="flex flex-col">
-                <span className="text-xl font-bold text-neutral-800">{profile.streak}</span>
-                <span className="text-sm font-medium text-neutral-500">Day streak</span>
+                <span className="text-xl font-bold text-neutral-800 dark:text-neutral-100">{profile.streak}</span>
+                <span className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Day streak</span>
               </div>
             </div>
-
-            {/* Total XP Stat */}
-            <div className="border-2 border-gray-200 rounded-2xl p-4 flex items-start gap-x-4">
+            <div className="border-2 border-gray-200 dark:border-slate-700 rounded-2xl p-4 flex items-start gap-x-4">
               <Zap className="w-8 h-8 text-[#FFD900] fill-[#FFD900] mt-1" />
               <div className="flex flex-col">
-                <span className="text-xl font-bold text-neutral-800">{profile.xp}</span>
-                <span className="text-sm font-medium text-neutral-500">Total XP</span>
+                <span className="text-xl font-bold text-neutral-800 dark:text-neutral-100">{profile.xp}</span>
+                <span className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Total XP</span>
               </div>
             </div>
-            
-            {/* Current League Placeholder */}
-            <div className="border-2 border-gray-200 rounded-2xl p-4 flex items-start gap-x-4">
-              <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center mt-1">
+            <div className="border-2 border-gray-200 dark:border-slate-700 rounded-2xl p-4 flex items-start gap-x-4">
+              <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-slate-700 flex items-center justify-center mt-1">
                 <Shield className="w-4 h-4 text-gray-400 fill-gray-400" />
               </div>
               <div className="flex flex-col">
-                <span className="text-xl font-bold text-neutral-800">None</span>
-                <span className="text-sm font-medium text-neutral-500">Current league</span>
+                <span className="text-xl font-bold text-neutral-800 dark:text-neutral-100">None</span>
+                <span className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Current league</span>
               </div>
             </div>
-
-            {/* Top 3 Finishes Placeholder */}
-            <div className="border-2 border-gray-200 rounded-2xl p-4 flex items-start gap-x-4">
-              <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center mt-1">
+            <div className="border-2 border-gray-200 dark:border-slate-700 rounded-2xl p-4 flex items-start gap-x-4">
+              <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-slate-700 flex items-center justify-center mt-1">
                 <Crown className="w-4 h-4 text-gray-400 fill-gray-400" />
               </div>
               <div className="flex flex-col">
-                <span className="text-xl font-bold text-neutral-800">0</span>
-                <span className="text-sm font-medium text-neutral-500">Top 3 finishes</span>
+                <span className="text-xl font-bold text-neutral-800 dark:text-neutral-100">0</span>
+                <span className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Top 3 finishes</span>
               </div>
             </div>
           </div>
@@ -177,15 +170,13 @@ const ProfilePage = async () => {
         {/* Achievements Section */}
         <div className="w-full mt-10">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold text-neutral-800">Achievements</h2>
+            <h2 className="text-2xl font-bold text-neutral-800 dark:text-neutral-100">Achievements</h2>
             <Link href="#" className="text-[#1CB0F6] font-bold text-sm uppercase tracking-wider hover:text-[#1899D6]">
               View All
             </Link>
           </div>
-          
-          <div className="border-2 border-gray-200 rounded-2xl flex flex-col">
+          <div className="border-2 border-gray-200 dark:border-slate-700 rounded-2xl flex flex-col">
             {profile.achievements.map((ach, index) => {
-              // Calculate progress
               let currentVal = 0;
               let targetVal = 1;
               if (ach.xp_threshold) {
@@ -201,23 +192,20 @@ const ProfilePage = async () => {
               return (
                 <div 
                   key={ach.id} 
-                  className={`p-6 flex items-center gap-x-6 ${index !== profile.achievements.length - 1 ? 'border-b-2 border-gray-200' : ''}`}
+                  className={`p-6 flex items-center gap-x-6 ${index !== profile.achievements.length - 1 ? 'border-b-2 border-gray-200 dark:border-slate-700' : ''}`}
                 >
-                  {/* Achievement Icon */}
                   <div className="w-20 h-20 flex-shrink-0">
                     <Image src={ach.icon} alt={ach.title} width={80} height={80} className="w-full h-full object-contain" />
                   </div>
-                  
-                  {/* Achievement Details */}
                   <div className="flex-1 flex flex-col gap-y-2">
                     <div className="flex items-center justify-between">
-                      <h3 className="font-bold text-lg text-neutral-800">{ach.title}</h3>
+                      <h3 className="font-bold text-lg text-neutral-800 dark:text-neutral-100">{ach.title}</h3>
                       <span className="text-sm font-bold text-neutral-400">
                         {Math.min(currentVal, targetVal)}/{targetVal}
                       </span>
                     </div>
                     <Progress value={pct} className="h-3" />
-                    <p className="text-neutral-500 text-sm font-medium mt-1">{ach.description}</p>
+                    <p className="text-neutral-500 dark:text-neutral-400 text-sm font-medium mt-1">{ach.description}</p>
                   </div>
                 </div>
               );

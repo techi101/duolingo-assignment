@@ -48,10 +48,10 @@ const QuestsPage = async () => {
             height={90}
             width={90}
           />
-          <h1 className="text-center font-bold text-neutral-800 text-2xl my-6">
+          <h1 className="text-center font-bold text-neutral-800 dark:text-neutral-100 text-2xl my-6">
             Quests
           </h1>
-          <p className="text-muted-foreground text-center text-lg mb-6">
+          <p className="text-muted-foreground dark:text-neutral-400 text-center text-lg mb-6">
             Complete quests by earning points.
           </p>
           <ul className="w-full">
@@ -60,7 +60,7 @@ const QuestsPage = async () => {
 
               return (
                 <div
-                  className="flex items-center w-full p-4 gap-x-4 border-t-2"
+                  className="flex items-center w-full p-4 gap-x-4 border-t-2 dark:border-slate-700"
                   key={quest.title}
                 >
                   <Image
@@ -70,7 +70,7 @@ const QuestsPage = async () => {
                     height={60}
                   />
                   <div className="flex flex-col gap-y-2 w-full">
-                    <p className="text-neutral-700 text-xl font-bold">
+                    <p className="text-neutral-700 dark:text-neutral-200 text-xl font-bold">
                       {quest.title}
                     </p>
                     <Progress value={progress} className="h-3" />
