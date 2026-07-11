@@ -36,7 +36,7 @@ const SettingsPage = async () => {
         <Quests points={userProgress.points} />
       </StickyWrapper>
       <div className="w-full flex-1 mb-10">
-        <h1 className="text-2xl font-bold text-neutral-800 mb-6">Settings</h1>
+        <h1 className="text-2xl font-bold text-neutral-800 dark:text-neutral-100 mb-6">Settings</h1>
         <SettingsClient />
       </div>
     </div>

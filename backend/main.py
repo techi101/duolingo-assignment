@@ -94,6 +94,21 @@ def get_users(db: Session = Depends(get_db)):
         for u in users
     ]
 
+@app.put("/users/me")
+def update_me(body: schemas.UserProfileUpdate, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == MOCK_USER_ID).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    if body.username is not None:
+        user.username = body.username
+    if body.userImageSrc is not None:
+        user.user_image_src = body.userImageSrc
+        
+    db.commit()
+    db.refresh(user)
+    return {"status": "success"}
+
 @app.get("/users/me")
 def get_me(db: Session = Depends(get_db)):
     user = db.query(User).filter(User.id == MOCK_USER_ID).first()

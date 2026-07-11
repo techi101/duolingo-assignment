@@ -6,6 +6,7 @@ import { getUserProfile } from "@/db/queries";
 import { FeedWrapper } from "@/components/feed-wrapper";
 import { StickyWrapper } from "@/components/sticky-wrapper";
 import { Progress } from "@/components/ui/progress";
+import { EditProfileButton } from "@/components/edit-profile-button";
 
 const ProfilePage = async () => {
   const profile = await getUserProfile();
@@ -93,9 +94,7 @@ const ProfilePage = async () => {
               <Plus className="w-10 h-10 text-white stroke-[3]" />
             </div>
             
-            <button className="absolute top-4 right-4 bg-white/50 hover:bg-white rounded-full p-2 transition-colors border-2 border-gray-200">
-              <Pen className="w-5 h-5 text-neutral-600" />
-            </button>
+            <EditProfileButton currentUsername={profile.username} currentImageSrc={profile.userImageSrc} />
           </div>
         </div>
 
@@ -194,8 +193,12 @@ const ProfilePage = async () => {
                   key={ach.id} 
                   className={`p-6 flex items-center gap-x-6 ${index !== profile.achievements.length - 1 ? 'border-b-2 border-gray-200 dark:border-slate-700' : ''}`}
                 >
-                  <div className="w-20 h-20 flex-shrink-0">
-                    <Image src={ach.icon} alt={ach.title} width={80} height={80} className="w-full h-full object-contain" />
+                  <div className="w-20 h-20 flex-shrink-0 flex items-center justify-center bg-gray-100 dark:bg-slate-800 rounded-2xl">
+                    {ach.icon.startsWith('/') || ach.icon.startsWith('http') ? (
+                      <Image src={ach.icon} alt={ach.title} width={80} height={80} className="w-full h-full object-contain" />
+                    ) : (
+                      <span className="text-4xl">{ach.icon}</span>
+                    )}
                   </div>
                   <div className="flex-1 flex flex-col gap-y-2">
                     <div className="flex items-center justify-between">

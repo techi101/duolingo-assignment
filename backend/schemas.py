@@ -13,3 +13,8 @@ class ChallengeProgressResponse(BaseModel):
 class UserHeartsResponse(BaseModel):
     hearts: int
     error: Optional[str] = None
+
+class UserProfileUpdate(BaseModel):
+    username: Optional[str] = None
+    userImageSrc: Optional[str] = None
+

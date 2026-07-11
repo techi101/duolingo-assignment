@@ -18,7 +18,7 @@ type Props = {
 };
 
 export const MatchPairsChallenge = ({ options, status, disabled, onComplete, onWrongPair }: Props) => {
-  const pairs: Pair[] = options.map((o) => {
+  const pairs: Pair[] = options.slice(0, 3).map((o) => {
     const [word, translation] = o.text.split("|||");
     return { word, translation };
   });
