@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -31,11 +30,11 @@ export const ExitModal = () => {
       <DialogContent className="max-w-md">
         <DialogHeader>
           <div className="flex items-center w-full justify-center mb-5">
-            <Image
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src="/mascot_sad.svg"
               alt="Mascot"
-              height={120}
-              width={120}
+              style={{ width: 120, height: 120 }}
               className="drop-shadow-md"
             />
           </div>
