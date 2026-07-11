@@ -178,7 +178,7 @@ export const Quiz = ({
             setStatus("correct");
             setPercentage((prev) => prev + 100 / challenges.length);
             if (initialPercentage === 100) {
-              setHearts((prev) => Math.min(prev + 1, 5));
+              setHearts((prev) => Math.min(prev + 1, 10));
             }
           })
           .catch(() => toast.error("Something went wrong. Please try again."));
@@ -200,7 +200,7 @@ export const Quiz = ({
             setStatus("correct");
             setPercentage((prev) => prev + 100 / challenges.length);
             if (initialPercentage === 100) {
-              setHearts((prev) => Math.min(prev + 1, 5));
+              setHearts((prev) => Math.min(prev + 1, 10));
             }
           })
           .catch(() => toast.error("Something went wrong. Please try again."));

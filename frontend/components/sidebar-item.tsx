@@ -41,7 +41,7 @@ export const SidebarItem = ({ label, iconSrc, href }: Props) => {
         />
       </div>
       <span className={cn(
-        "hidden md:block",
+        "block",
         active ? "text-[#58CC02]" : "text-[#3C3C3C]",
       )}>
         {label}

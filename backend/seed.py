@@ -163,7 +163,7 @@ users_data = [
     ("Olivia", 180, "/girl.svg")
 ]
 for name, xp, img in users_data:
-    u = User(username=name, xp=xp, hearts=5, active_course_id=spanish.id, user_image_src=img, streak=7, last_active_date=datetime.date.today())
+    u = User(username=name, xp=xp, hearts=10, active_course_id=spanish.id, user_image_src=img, streak=7, last_active_date=datetime.date.today())
     db.add(u)
 db.flush()
 

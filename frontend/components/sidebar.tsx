@@ -59,7 +59,7 @@ export const Sidebar = ({ className }: Props) => {
               {/* Online dot */}
               <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-[#58CC02] border-2 border-white" />
             </div>
-            <div className="flex-1 min-w-0 hidden md:block">
+            <div className="flex-1 min-w-0 block">
               <p className="font-extrabold text-[#3C3C3C] text-sm truncate">Learner</p>
               <p className="text-[#AFAFAF] text-xs font-bold truncate">View Profile →</p>
             </div>

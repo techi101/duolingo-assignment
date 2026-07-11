@@ -326,11 +326,11 @@ def reduce_hearts(body: ReduceHeartsBody, db: Session = Depends(get_db)):
 def refill_hearts(db: Session = Depends(get_db)):
     from constants import POINTS_TO_REFILL
     user = db.query(User).filter(User.id == MOCK_USER_ID).first()
-    if user.hearts >= 5:
+    if user.hearts >= 10:
         return {"error": "already_full"}
     if user.xp < POINTS_TO_REFILL:
         return {"error": "not_enough_points"}
-    user.hearts = 5
+    user.hearts = 10
     user.xp -= POINTS_TO_REFILL
     db.commit()
     return {"success": True}

@@ -12,7 +12,7 @@ class User(Base):
     user_image_src = Column(String, default="/avatars/default.svg")
     xp = Column(Integer, default=0)
     streak = Column(Integer, default=0)
-    hearts = Column(Integer, default=5)
+    hearts = Column(Integer, default=10)
     active_course_id = Column(Integer, ForeignKey("courses.id"), nullable=True)
     last_active_date = Column(Date, nullable=True)   # for streak logic
     progress = relationship("UserProgress", back_populates="user")

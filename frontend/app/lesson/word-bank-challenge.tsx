@@ -97,7 +97,7 @@ export const WordBankChallenge = ({
       {/* Mascot and Speech Bubble */}
       {foreignPhrase && (
         <div className="flex items-center gap-x-4">
-          <Image
+          <img
             src={`/${mascot}.png`}
             alt={mascot}
             width={100}
