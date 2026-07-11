@@ -105,12 +105,12 @@ export const MatchPairsChallenge = ({ options, status, disabled, onComplete, onW
                 "relative px-4 py-3 rounded-2xl border-2 border-b-4 font-bold text-sm transition-all duration-150",
                 "hover:scale-[1.02] active:scale-[0.98] active:border-b-2",
                 isMatched
-                  ? "border-green-300 bg-green-50 text-green-600 pointer-events-none opacity-60"
+                  ? "border-green-300 bg-green-50 text-green-600 pointer-events-none opacity-60 dark:border-green-800 dark:bg-green-900/30 dark:text-green-400"
                   : isError
-                  ? "border-rose-300 bg-rose-50 text-rose-500 pointer-events-none"
+                  ? "border-rose-300 bg-rose-50 text-rose-500 pointer-events-none dark:border-rose-800 dark:bg-rose-900/30 dark:text-rose-400"
                   : isSelected
-                  ? "border-sky-400 bg-sky-50 text-sky-600"
-                  : "border-gray-200 bg-white text-neutral-700 hover:border-gray-300",
+                  ? "border-sky-400 bg-sky-50 text-sky-600 dark:border-sky-800 dark:bg-sky-900/30 dark:text-sky-400"
+                  : "border-gray-200 bg-white text-neutral-700 hover:border-gray-300 dark:bg-slate-800 dark:border-slate-700 dark:text-neutral-200 dark:hover:border-slate-600",
               )}
             >
               {isMatched && (
@@ -136,12 +136,12 @@ export const MatchPairsChallenge = ({ options, status, disabled, onComplete, onW
                 "px-4 py-3 rounded-2xl border-2 border-b-4 font-bold text-sm transition-all duration-150",
                 "hover:scale-[1.02] active:scale-[0.98] active:border-b-2",
                 isMatched
-                  ? "border-purple-300 bg-purple-50 text-purple-600 pointer-events-none opacity-60"
+                  ? "border-purple-300 bg-purple-50 text-purple-600 pointer-events-none opacity-60 dark:border-purple-800 dark:bg-purple-900/30 dark:text-purple-400"
                   : isError
-                  ? "border-rose-300 bg-rose-50 text-rose-500 pointer-events-none"
+                  ? "border-rose-300 bg-rose-50 text-rose-500 pointer-events-none dark:border-rose-800 dark:bg-rose-900/30 dark:text-rose-400"
                   : isSelected
-                  ? "border-yellow-400 bg-yellow-50 text-yellow-600"
-                  : "border-gray-200 bg-white text-neutral-700 hover:border-gray-300",
+                  ? "border-yellow-400 bg-yellow-50 text-yellow-600 dark:border-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
+                  : "border-gray-200 bg-white text-neutral-700 hover:border-gray-300 dark:bg-slate-800 dark:border-slate-700 dark:text-neutral-200 dark:hover:border-slate-600",
               )}
             >
               {trans}
