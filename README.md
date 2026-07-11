@@ -2,7 +2,7 @@
 
 A full-stack, highly interactive language learning application that recreates the core Duolingo experience, featuring a gamified path, an interactive lesson engine, and persistent user progress.
 
-> **Live Demo:** [https://duolingo-clone-82wghhfts-techi101s-projects.vercel.app](https://duolingo-clone-82wghhfts-techi101s-projects.vercel.app)
+> **Live Demo:** [https://duolingo-clone-five-bice.vercel.app](https://duolingo-clone-five-bice.vercel.app)
 > **GitHub Repository:** [https://github.com/techi101/duolingo-assignment](https://github.com/techi101/duolingo-assignment)
 
 ---
