@@ -3,6 +3,7 @@
 A full-stack, highly interactive language learning application that recreates the core Duolingo experience, featuring a gamified path, an interactive lesson engine, and persistent user progress.
 
 > **Live Demo:** [https://duolingo-clone-five-bice.vercel.app](https://duolingo-clone-five-bice.vercel.app)
+> *(Note: The live demo is hosted on a free tier and may take ~1 minute to load initially. Please be patient!)*
 > **GitHub Repository:** [https://github.com/techi101/duolingo-assignment](https://github.com/techi101/duolingo-assignment)
 
 ---
