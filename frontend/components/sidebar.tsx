@@ -17,7 +17,7 @@ const NAV_ITEMS = [
 export const Sidebar = ({ className }: Props) => {
   return (
     <div className={cn(
-      "flex h-full w-[256px] lg:fixed left-0 top-0",
+      "flex h-full w-full",
       "flex-col border-r-2 border-gray-100 bg-white dark:bg-slate-900 dark:border-slate-800 dark:text-neutral-200",
       className,
     )}>
