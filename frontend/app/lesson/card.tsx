@@ -75,13 +75,13 @@ export const Card = ({
     <div
       onClick={handleClick}
       className={cn(
-        "h-full border-2 rounded-xl border-b-4 hover:bg-black/5 dark:hover:bg-slate-800 dark:border-slate-700 p-4 lg:p-6 cursor-pointer active:border-b-2",
-        selected && "border-sky-300 bg-sky-100 hover:bg-sky-100",
+        "h-full border-2 rounded-xl border-b-4 hover:bg-black/5 dark:bg-slate-800/40 dark:hover:bg-slate-800 dark:border-slate-700 p-4 lg:p-6 cursor-pointer active:border-b-2",
+        selected && "border-sky-300 bg-sky-100 hover:bg-sky-100 dark:bg-sky-900/50 dark:hover:bg-sky-900/50",
         selected && status === "correct" 
-          && "border-green-300 bg-green-100 hover:bg-green-100",
+          && "border-green-300 bg-green-100 hover:bg-green-100 dark:bg-green-900/50 dark:hover:bg-green-900/50",
         selected && status === "wrong" 
-          && "border-rose-300 bg-rose-100 hover:bg-rose-100",
-        disabled && "pointer-events-none hover:bg-white",
+          && "border-rose-300 bg-rose-100 hover:bg-rose-100 dark:bg-rose-900/50 dark:hover:bg-rose-900/50",
+        disabled && "pointer-events-none hover:bg-white dark:hover:bg-slate-800",
         type === "ASSIST" && "lg:p-3 w-full"
       )}
     >
@@ -99,7 +99,7 @@ export const Card = ({
       )}>
         {type === "ASSIST" && <div />}
         <p className={cn(
-          "text-neutral-600 dark:text-neutral-200 text-sm lg:text-base",
+          "text-neutral-600 dark:text-white text-sm lg:text-base",
           selected && "text-sky-500",
           selected && status === "correct" 
             && "text-green-500",

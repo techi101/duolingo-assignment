@@ -16,7 +16,7 @@ const Loading = () => {
   const quote = QUOTES[Math.floor(Math.random() * QUOTES.length)];
 
   return (
-    <div className="h-full w-full flex flex-col items-center justify-center gap-y-6 bg-white absolute inset-0 z-50">
+    <div className="h-full w-full flex flex-col items-center justify-center gap-y-6 bg-white dark:bg-slate-900 absolute inset-0 z-50">
       <div className="relative h-24 w-24 lg:h-32 lg:w-32 animate-bounce">
         <Image
           src="/mascot.svg"
@@ -25,8 +25,8 @@ const Loading = () => {
         />
       </div>
       <div className="flex flex-col items-center gap-y-2 mt-4">
-        <h2 className="text-sm font-bold text-neutral-400 uppercase tracking-widest">Loading...</h2>
-        <p className="text-muted-foreground text-sm lg:text-base font-bold text-center px-6 max-w-[400px]">
+        <h2 className="text-sm font-bold text-neutral-400 dark:text-neutral-300 uppercase tracking-widest">Loading...</h2>
+        <p className="text-muted-foreground dark:text-neutral-200 text-sm lg:text-base font-bold text-center px-6 max-w-[400px]">
           {quote}
         </p>
       </div>

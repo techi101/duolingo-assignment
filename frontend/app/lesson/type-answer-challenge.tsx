@@ -44,8 +44,8 @@ export const TypeAnswerChallenge = ({
         className={cn(
           "w-full rounded-2xl border-2 border-b-4 transition-all duration-200 dark:bg-slate-800",
           status === "none" && "border-gray-200 dark:border-slate-700 focus-within:border-[#58CC02] dark:focus-within:border-[#58CC02]",
-          status === "correct" && "border-green-400 bg-green-50",
-          status === "wrong" && "border-rose-400 bg-rose-50",
+          status === "correct" && "border-green-400 bg-green-50 dark:bg-green-900/50",
+          status === "wrong" && "border-rose-400 bg-rose-50 dark:bg-rose-900/50",
         )}
       >
         <input
@@ -55,10 +55,10 @@ export const TypeAnswerChallenge = ({
           disabled={disabled || status !== "none"}
           placeholder="Type your answer…"
           className={cn(
-            "w-full bg-transparent px-5 py-4 text-lg font-bold outline-none rounded-2xl text-neutral-700 dark:text-neutral-200",
+            "w-full bg-transparent px-5 py-4 text-lg font-bold outline-none rounded-2xl text-neutral-700 dark:text-white",
             "placeholder:text-gray-300 dark:placeholder:text-neutral-500 placeholder:font-normal",
-            status === "correct" && "text-green-600 dark:text-green-600",
-            status === "wrong" && "text-rose-500 line-through",
+            status === "correct" && "text-green-600 dark:text-green-400",
+            status === "wrong" && "text-rose-500 dark:text-rose-400 line-through",
           )}
         />
       </div>
