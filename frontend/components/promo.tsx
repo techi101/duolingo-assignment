@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button";
 
 export const Promo = () => {
   return (
-    <div className="border-2 rounded-xl p-6 relative overflow-hidden">
+    <div className="border-2 dark:border-slate-800 rounded-xl p-6 relative overflow-hidden">
       <div className="flex flex-col gap-y-4">
         <div className="w-full flex justify-between items-start">
           <div className="space-y-2 z-10 w-[60%]">
-            <h3 className="font-bold text-lg text-neutral-800">
+            <h3 className="font-bold text-lg text-neutral-800 dark:text-neutral-200">
               Try Super for free
             </h3>
             <p className="text-muted-foreground text-sm font-semibold leading-snug">

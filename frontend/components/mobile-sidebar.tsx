@@ -33,30 +33,17 @@ const MobileNavItem = ({
     <Link
       href={href}
       onClick={onClose}
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "12px",
-        padding: "12px 16px",
-        borderRadius: "16px",
-        border: "2px solid",
-        borderColor: active ? "#C7EDAB" : "transparent",
-        backgroundColor: active ? "#EAF9E0" : "transparent",
-        marginBottom: "4px",
-        textDecoration: "none",
-      }}
+      className={`flex items-center gap-x-3 px-4 py-3 rounded-2xl w-full font-extrabold text-sm uppercase tracking-wider mb-1 transition-all duration-150 ease-out hover:bg-[#F7F7F7] dark:hover:bg-slate-800 ${
+        active
+          ? "bg-[#EAF9E0] text-[#58CC02] border-2 border-[#C7EDAB] shadow-sm dark:bg-[#58CC02]/10 dark:border-[#58CC02]/30 dark:text-[#58CC02]"
+          : "text-[#AFAFAF] border-2 border-transparent hover:border-[#EFEFEF] dark:hover:border-slate-700 dark:text-neutral-200"
+      }`}
     >
-      <div style={{ width: "32px", height: "32px", position: "relative", flexShrink: 0 }}>
+      <div className={`w-8 h-8 relative flex-shrink-0 transition-transform duration-200 ${active ? "scale-110" : ""}`}>
         <Image src={iconSrc} alt={label} fill className="object-contain" />
       </div>
       <span
-        style={{
-          fontWeight: 800,
-          fontSize: "13px",
-          textTransform: "uppercase",
-          letterSpacing: "0.08em",
-          color: active ? "#58CC02" : "#3C3C3C",
-        }}
+        className={`block ${active ? "text-[#58CC02] dark:text-[#58CC02]" : "text-[#3C3C3C] dark:text-neutral-200"}`}
       >
         {label}
       </span>
@@ -73,7 +60,7 @@ export const MobileSidebar = () => {
       <button
         onClick={() => setOpen(true)}
         aria-label="Open menu"
-        style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex" }}
+        className="bg-transparent border-none cursor-pointer p-0 flex"
       >
         <Menu className="text-white" size={26} />
       </button>
@@ -82,53 +69,35 @@ export const MobileSidebar = () => {
       {open && (
         <div
           onClick={() => setOpen(false)}
-          style={{
-            position: "fixed",
-            inset: 0,
-            backgroundColor: "rgba(0,0,0,0.6)",
-            zIndex: 200,
-          }}
+          className="fixed inset-0 bg-black/60 z-[200]"
         />
       )}
 
       {/* Drawer */}
       <div
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          height: "100%",
-          width: "280px",
-          maxWidth: "85vw",
-          backgroundColor: "#ffffff",
-          zIndex: 300,
-          display: "flex",
-          flexDirection: "column",
-          boxShadow: "4px 0 24px rgba(0,0,0,0.15)",
-          transform: open ? "translateX(0)" : "translateX(-100%)",
-          transition: "transform 0.3s ease",
-          overflowY: "auto",
-        }}
+        className={`fixed top-0 left-0 h-full w-[280px] max-w-[85vw] bg-white dark:bg-slate-900 z-[300] flex flex-col shadow-[4px_0_24px_rgba(0,0,0,0.15)] transition-transform duration-300 ease-in-out overflow-y-auto ${
+          open ? "translate-x-0" : "-translate-x-full"
+        }`}
       >
         {/* Header */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 20px 12px" }}>
-          <span style={{ fontSize: "28px", fontWeight: 900, color: "#58CC02", letterSpacing: "-1px" }}>
+        <div className="flex items-center justify-between px-5 pt-5 pb-3">
+          <span className="text-[28px] font-black text-[#58CC02] tracking-tighter">
             duolingo
           </span>
           <button
             onClick={() => setOpen(false)}
-            style={{ background: "none", border: "none", cursor: "pointer", padding: "4px", display: "flex" }}
+            className="bg-transparent border-none cursor-pointer p-1 flex"
             aria-label="Close menu"
           >
-            <X size={22} color="#AFAFAF" />
+            <X size={22} className="text-[#AFAFAF]" />
           </button>
         </div>
 
         {/* Divider */}
-        <div style={{ height: "2px", backgroundColor: "#f0f0f0", margin: "0 16px 8px" }} />
+        <div className="h-[2px] bg-[#f0f0f0] dark:bg-slate-800 mx-4 mb-2" />
 
         {/* Navigation */}
-        <nav style={{ flex: 1, padding: "8px 12px" }}>
+        <nav className="flex-1 px-3 py-2 flex flex-col gap-y-1">
           {NAV_ITEMS.map((item) => (
             <MobileNavItem
               key={item.href}
@@ -141,42 +110,20 @@ export const MobileSidebar = () => {
         </nav>
 
         {/* User profile at bottom */}
-        <div style={{ borderTop: "2px solid #f0f0f0", padding: "12px 16px" }}>
+        <div className="border-t-2 border-[#f0f0f0] dark:border-slate-800 p-4">
           <Link
             href="/profile"
             onClick={() => setOpen(false)}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              padding: "10px 12px",
-              borderRadius: "16px",
-              textDecoration: "none",
-              backgroundColor: "transparent",
-            }}
+            className="flex items-center gap-x-3 px-3 py-2.5 rounded-2xl bg-transparent hover:bg-[#F7F7F7] dark:hover:bg-slate-800 transition-colors"
           >
-            <div
-              style={{
-                width: "40px",
-                height: "40px",
-                borderRadius: "50%",
-                background: "linear-gradient(135deg, #58CC02, #46A302)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "white",
-                fontWeight: 900,
-                fontSize: "14px",
-                flexShrink: 0,
-              }}
-            >
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#58CC02] to-[#46A302] flex items-center justify-center text-white font-black text-sm shrink-0 shadow-sm">
               L
             </div>
-            <div style={{ minWidth: 0 }}>
-              <p style={{ fontWeight: 800, color: "#3C3C3C", fontSize: "14px", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+            <div className="min-w-0 flex-1">
+              <p className="font-extrabold text-[#3C3C3C] dark:text-neutral-200 text-[14px] m-0 overflow-hidden text-ellipsis whitespace-nowrap">
                 Learner
               </p>
-              <p style={{ color: "#AFAFAF", fontSize: "12px", fontWeight: 700, margin: 0 }}>
+              <p className="text-[#AFAFAF] text-[12px] font-bold m-0">
                 View Profile →
               </p>
             </div>
