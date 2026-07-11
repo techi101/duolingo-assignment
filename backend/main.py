@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session, sessionmaker
 from fastapi.middleware.cors import CORSMiddleware
 import datetime
+from pydantic import BaseModel
 from models import (
     engine, User, Course, Unit, Lesson,
     Challenge, ChallengeOption, ChallengeProgress, UserProgress
