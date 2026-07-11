@@ -34,8 +34,9 @@ export const ExitModal = () => {
             <Image
               src="/mascot_sad.svg"
               alt="Mascot"
-              height={80}
-              width={80}
+              height={120}
+              width={120}
+              className="drop-shadow-md"
             />
           </div>
           <DialogTitle className="text-center font-bold text-2xl">

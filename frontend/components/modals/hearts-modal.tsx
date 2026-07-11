@@ -36,12 +36,17 @@ export const HeartsModal = () => {
       <DialogContent className="max-w-md">
         <DialogHeader>
           <div className="flex items-center w-full justify-center mb-5">
-            <Image
-              src="/mascot.svg"
-              alt="Mascot"
-              height={80}
-              width={80}
-            />
+            <div className="relative">
+              <Image
+                src="/mascot.svg"
+                alt="Mascot"
+                height={120}
+                width={120}
+                className="drop-shadow-md"
+              />
+              {/* Sad badge */}
+              <div className="absolute -bottom-1 -right-1 bg-rose-500 rounded-full w-8 h-8 flex items-center justify-center text-white text-lg font-black shadow-md">💔</div>
+            </div>
           </div>
           <DialogTitle className="text-center font-bold text-2xl">
             You ran out of hearts!
