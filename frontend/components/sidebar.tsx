@@ -17,7 +17,7 @@ const NAV_ITEMS = [
 export const Sidebar = ({ className }: Props) => {
   return (
     <div className={cn(
-      "flex h-full md:w-[256px] md:fixed left-0 top-0",
+      "flex h-full w-[256px] lg:fixed left-0 top-0",
       "flex-col border-r-2 border-gray-100 bg-white dark:bg-slate-900 dark:border-slate-800 dark:text-neutral-200",
       className,
     )}>
@@ -46,9 +46,9 @@ export const Sidebar = ({ className }: Props) => {
       </nav>
 
       {/* User Profile at bottom */}
-      <div className="p-4 border-t-2 border-gray-100">
+      <div className="p-4 border-t-2 border-gray-100 dark:border-slate-800">
         <Link href="/profile">
-          <div className="flex items-center gap-x-3 px-3 py-2 rounded-2xl hover:bg-[#F7F7F7] transition-colors cursor-pointer">
+          <div className="flex items-center gap-x-3 px-3 py-2 rounded-2xl hover:bg-[#F7F7F7] dark:hover:bg-slate-800 transition-colors cursor-pointer">
             {/* Avatar */}
             <div className="relative flex-shrink-0">
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#58CC02] to-[#46A302]
@@ -57,10 +57,10 @@ export const Sidebar = ({ className }: Props) => {
                 L
               </div>
               {/* Online dot */}
-              <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-[#58CC02] border-2 border-white" />
+              <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-[#58CC02] border-2 border-white dark:border-slate-900" />
             </div>
             <div className="flex-1 min-w-0 block">
-              <p className="font-extrabold text-[#3C3C3C] text-sm truncate">Learner</p>
+              <p className="font-extrabold text-[#3C3C3C] dark:text-neutral-200 text-sm truncate">Learner</p>
               <p className="text-[#AFAFAF] text-xs font-bold truncate">View Profile →</p>
             </div>
           </div>

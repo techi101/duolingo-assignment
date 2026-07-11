@@ -19,13 +19,13 @@ export const SidebarItem = ({ label, iconSrc, href }: Props) => {
     <Link
       href={href}
       className={cn(
-        "flex items-center gap-x-3 px-4 py-3 rounded-2xl",
+        "flex items-center gap-x-3 px-4 py-3 rounded-2xl w-full",
         "font-extrabold text-sm uppercase tracking-wider",
         "transition-all duration-150 ease-out",
-        "hover:bg-[#F7F7F7]",
+        "hover:bg-[#F7F7F7] dark:hover:bg-slate-800",
         active
-          ? "bg-[#EAF9E0] text-[#58CC02] border-2 border-[#C7EDAB] shadow-sm"
-          : "text-[#AFAFAF] border-2 border-transparent hover:border-[#EFEFEF]",
+          ? "bg-[#EAF9E0] text-[#58CC02] border-2 border-[#C7EDAB] shadow-sm dark:bg-[#58CC02]/10 dark:border-[#58CC02]/30 dark:text-[#58CC02]"
+          : "text-[#AFAFAF] border-2 border-transparent hover:border-[#EFEFEF] dark:hover:border-slate-700 dark:text-neutral-200",
       )}
     >
       <div className={cn(
@@ -42,13 +42,13 @@ export const SidebarItem = ({ label, iconSrc, href }: Props) => {
       </div>
       <span className={cn(
         "block",
-        active ? "text-[#58CC02]" : "text-[#3C3C3C]",
+        active ? "text-[#58CC02] dark:text-[#58CC02]" : "text-[#3C3C3C] dark:text-neutral-200",
       )}>
         {label}
       </span>
       {/* Active indicator dot for mobile */}
       {active && (
-        <div className="md:hidden ml-auto w-1.5 h-1.5 rounded-full bg-[#58CC02]" />
+        <div className="lg:hidden ml-auto w-1.5 h-1.5 rounded-full bg-[#58CC02]" />
       )}
     </Link>
   );

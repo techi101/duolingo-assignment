@@ -27,14 +27,14 @@ export const Footer = ({
 
   return (
     <footer className={cn(
-      "lg:-h[140px] h-[100px] border-t-2",
-      status === "correct" && "border-transparent bg-green-100",
-      status === "wrong" && "border-transparent bg-rose-100",
+      "lg:h-[140px] h-auto min-h-[100px] py-4 lg:py-0 border-t-2",
+      status === "correct" && "border-transparent bg-green-100 dark:bg-green-900/30",
+      status === "wrong" && "border-transparent bg-rose-100 dark:bg-rose-900/30",
     )}>
-      <div className="max-w-[1140px] h-full mx-auto flex items-center justify-between px-6 lg:px-10">
+      <div className="max-w-[1140px] h-full mx-auto flex flex-wrap sm:flex-nowrap items-center justify-between px-4 lg:px-10 gap-4">
         
         {/* Left Side: Skip, Feedback, or Report */}
-        <div className="flex flex-col md:flex-row items-start md:items-center gap-y-2 md:gap-x-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-y-2 sm:gap-x-4 flex-1">
           
           {status === "none" && !hideCheck && (
             <Button
