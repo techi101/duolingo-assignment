@@ -7,6 +7,7 @@ from models import (
     Challenge, ChallengeOption, ChallengeProgress, UserProgress
 )
 import schemas
+from pydantic import BaseModel
 
 app = FastAPI(title="Duolingo Clone API")
 
