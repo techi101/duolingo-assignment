@@ -2,11 +2,14 @@ import { Loader } from "lucide-react";
 import Image from "next/image";
 
 const QUOTES = [
-  "15 minutes a day can teach you a language. What can 15 minutes of social media do?",
-  "Learning a language makes your brain bigger!",
-  "The hardest part is getting started. You've got this!",
-  "Mistakes are proof that you are trying.",
-  "Your language learning journey starts here!"
+  "Protip: The owl is always watching.",
+  "15 minutes a day can teach you a language. What can 15 minutes of scrolling do?",
+  "Learning a language makes your brain bigger! (Not literally, that would hurt.)",
+  "Mistakes are proof that you are trying... unless you ignore them.",
+  "Did you know? Spanish is the second most spoken native language in the world!",
+  "Protip: Repeat each sentence in a lesson out loud.",
+  "Don't make the green owl angry. Do your lesson.",
+  "Loading your daily dose of language learning..."
 ];
 
 const Loading = () => {
@@ -21,10 +24,12 @@ const Loading = () => {
           alt="Mascot Loading"
         />
       </div>
-      <p className="text-muted-foreground text-sm lg:text-lg font-bold text-center px-6 max-w-[400px]">
-        "{quote}"
-      </p>
-      <Loader className="h-6 w-6 text-muted-foreground animate-spin" />
+      <div className="flex flex-col items-center gap-y-2 mt-4">
+        <h2 className="text-sm font-bold text-neutral-400 uppercase tracking-widest">Loading...</h2>
+        <p className="text-muted-foreground text-sm lg:text-base font-bold text-center px-6 max-w-[400px]">
+          {quote}
+        </p>
+      </div>
     </div>
   );
 };

@@ -111,6 +111,10 @@ const config = {
           "0%, 100%": { boxShadow: "0 0 5px rgba(88,204,2,0.3)" },
           "50%": { boxShadow: "0 0 15px rgba(88,204,2,0.6)" },
         },
+        "mascot-wiggle": {
+          "0%, 100%": { transform: "rotate(-3deg) scaleY(1)" },
+          "50%": { transform: "rotate(3deg) scaleY(0.95)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -120,6 +124,7 @@ const config = {
         "slide-up": "slide-up 0.4s ease-out",
         "fade-in": "fade-in 0.3s ease-out",
         "glow-pulse": "glow-pulse 2s ease-in-out infinite",
+        "mascot-wiggle": "mascot-wiggle 1.5s ease-in-out infinite",
       },
     },
   },

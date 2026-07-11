@@ -1,13 +1,12 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session, sessionmaker
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from typing import Optional
 import datetime
 from models import (
     engine, User, Course, Unit, Lesson,
     Challenge, ChallengeOption, ChallengeProgress, UserProgress
 )
+import schemas
 
 app = FastAPI(title="Duolingo Clone API")
 
@@ -250,18 +249,16 @@ def get_active_lesson(db: Session = Depends(get_db)):
     raise HTTPException(status_code=404, detail="No lessons found")
 
 # ── Challenge Progress ────────────────────────────────────────────────────────
-class ChallengeProgressBody(BaseModel):
-    challengeId: int
 
 @app.post("/challenge-progress")
-def upsert_challenge_progress(body: ChallengeProgressBody, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.id == MOCK_USER_ID).first()
+def upsert_challenge_progress(body: schemas.ChallengeProgressRequest, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == body.user_id).first()
     challenge = db.query(Challenge).filter(Challenge.id == body.challengeId).first()
     if not challenge:
         raise HTTPException(status_code=404, detail="Challenge not found")
 
     existing = db.query(ChallengeProgress).filter(
-        ChallengeProgress.user_id == MOCK_USER_ID,
+        ChallengeProgress.user_id == body.user_id,
         ChallengeProgress.challenge_id == body.challengeId,
     ).first()
 
@@ -270,7 +267,7 @@ def upsert_challenge_progress(body: ChallengeProgressBody, db: Session = Depends
     if existing:
         existing.completed = True
     else:
-        db.add(ChallengeProgress(user_id=MOCK_USER_ID, challenge_id=body.challengeId, completed=True))
+        db.add(ChallengeProgress(user_id=body.user_id, challenge_id=body.challengeId, completed=True))
 
     if not is_practice:
         user.xp += 10

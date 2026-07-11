@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition, useCallback } from "react";
 import { useAudio, useWindowSize, useMount } from "react-use";
 
+import { cn } from "@/lib/utils";
 import { reduceHearts } from "@/actions/user-progress";
 import { useHeartsModal } from "@/store/use-hearts-modal";
 import { Challenge, ChallengeOption } from "@/db/queries";
@@ -20,6 +21,8 @@ import { ResultCard } from "./result-card";
 import { QuestionBubble } from "./question-bubble";
 import { TypeAnswerChallenge } from "./type-answer-challenge";
 import { MatchPairsChallenge } from "./match-pairs-challenge";
+import { FillInBlanksChallenge } from "./fill-in-blanks-challenge";
+import { WordBankChallenge } from "./word-bank-challenge";
 
 type Props = {
   initialPercentage: number;
@@ -30,6 +33,7 @@ type Props = {
     challengeOptions: ChallengeOption[];
   })[];
   userSubscription: { isActive: boolean } | null;
+  activeCourse: { title: string; imageSrc: string };
 };
 
 export const Quiz = ({
@@ -38,6 +42,7 @@ export const Quiz = ({
   initialLessonId,
   initialLessonChallenges,
   userSubscription,
+  activeCourse,
 }: Props) => {
   const { open: openHeartsModal } = useHeartsModal();
   const { open: openPracticeModal } = usePracticeModal();
@@ -51,7 +56,7 @@ export const Quiz = ({
   const { width, height } = useWindowSize();
   const router = useRouter();
 
-  const [finishAudio] = useAudio({ src: "/finish.mp3", autoPlay: true });
+  const [finishAudio, _f, finishControls] = useAudio({ src: "/finish.mp3" });
   const [correctAudio, _c, correctControls] = useAudio({ src: "/correct.wav" });
   const [incorrectAudio, _i, incorrectControls] = useAudio({ src: "/incorrect.wav" });
   const [pending, startTransition] = useTransition();
@@ -61,7 +66,7 @@ export const Quiz = ({
   const [percentage, setPercentage] = useState(() =>
     initialPercentage === 100 ? 0 : initialPercentage
   );
-  const [challenges] = useState(initialLessonChallenges);
+  const [challenges, setChallenges] = useState(initialLessonChallenges);
   const [activeIndex, setActiveIndex] = useState(() => {
     const uncompletedIndex = challenges.findIndex((c) => !c.completed);
     return uncompletedIndex === -1 ? 0 : uncompletedIndex;
@@ -96,11 +101,11 @@ export const Quiz = ({
   // Determine if the current answer is correct
   const isAnswerCorrect = useCallback((): boolean => {
     if (!challenge) return false;
-    if (challenge.type === "SELECT" || challenge.type === "ASSIST") {
+    if (challenge.type === "SELECT" || challenge.type === "ASSIST" || challenge.type === "FILL_IN_BLANKS") {
       const correctOpt = options.find((o) => o.correct);
       return correctOpt?.id === selectedOption;
     }
-    if (challenge.type === "TYPE_ANSWER") {
+    if (challenge.type === "TYPE_ANSWER" || challenge.type === "WORD_BANK") {
       const correctOpt = options.find((o) => o.correct);
       return (
         typedAnswer.trim().toLowerCase() ===
@@ -116,17 +121,40 @@ export const Quiz = ({
   // Whether there's a valid answer selected to enable the Check button
   const hasAnswer = (): boolean => {
     if (!challenge) return false;
-    if (challenge.type === "SELECT" || challenge.type === "ASSIST")
+    if (challenge.type === "SELECT" || challenge.type === "ASSIST" || challenge.type === "FILL_IN_BLANKS")
       return !!selectedOption;
-    if (challenge.type === "TYPE_ANSWER") return typedAnswer.trim().length > 0;
+    if (challenge.type === "TYPE_ANSWER" || challenge.type === "WORD_BANK") return typedAnswer.trim().length > 0;
     if (challenge.type === "MATCH_PAIRS") return matchPairsComplete;
     return false;
+  };
+
+  const onSkip = () => {
+    if (status !== "none") return;
+
+    startTransition(() => {
+      reduceHearts(challenge.id)
+        .then((response) => {
+          if (response?.error === "hearts") {
+            openHeartsModal();
+            return;
+          }
+          incorrectControls.play();
+          setStatus("wrong");
+          if (!response?.error) {
+            setHearts((prev) => Math.max(prev - 1, 0));
+          }
+        })
+        .catch(() => toast.error("Something went wrong. Please try again."));
+    });
   };
 
   const onContinue = () => {
     if (!hasAnswer() && status === "none") return;
 
     if (status === "wrong") {
+      // Push the failed/skipped challenge to the back of the queue!
+      setChallenges((current) => [...current, challenge]);
+      setActiveIndex((current) => current + 1);
       resetChallengeState();
       return;
     }
@@ -253,84 +281,118 @@ export const Quiz = ({
       ? challenge.question
       : challenge.type === "MATCH_PAIRS"
       ? challenge.question
+      : challenge.type === "FILL_IN_BLANKS"
+      ? "Fill in the blank"
+      : challenge.type === "WORD_BANK"
+      ? "Translate this sentence"
       : challenge.question;
-
   return (
     <>
+      {finishAudio}
       {incorrectAudio}
       {correctAudio}
-      <Header
-        hearts={hearts}
-        percentage={percentage}
-        hasActiveSubscription={!!userSubscription?.isActive}
-      />
-      <div className="flex-1">
-        <div className="h-full flex items-center justify-center">
-          <div className="lg:min-h-[350px] lg:w-[600px] w-full px-6 lg:px-0 flex flex-col gap-y-12">
-            <h1 className="text-lg lg:text-3xl text-center lg:text-start font-bold text-neutral-700">
-              {title}
-            </h1>
-            <div>
-              {challenge.type === "ASSIST" && (
-                <QuestionBubble question={challenge.question} />
-              )}
+      <div className="flex flex-col h-screen dark:bg-slate-950">
+        <Header
+          hearts={hearts}
+          percentage={percentage}
+          hasActiveSubscription={!!userSubscription?.isActive}
+        />
+        <div className="flex-1">
+          <div className="h-full flex items-center justify-center">
+            <div className="lg:min-h-[350px] lg:w-[600px] w-full px-6 lg:px-0 flex flex-col gap-y-12">
+              <h1 className="text-lg lg:text-3xl text-center lg:text-start font-bold text-neutral-700 dark:text-neutral-200">
+                {title}
+              </h1>
+              <div>
+                {challenge.type === "ASSIST" && (
+                  <QuestionBubble question={challenge.question} />
+                )}
 
-              {(challenge.type === "SELECT" || challenge.type === "ASSIST") && (
-                <ChallengeComponent
-                  options={options}
-                  onSelect={onSelect}
-                  status={status}
-                  selectedOption={selectedOption}
-                  disabled={pending}
-                  type={challenge.type}
-                />
-              )}
+                {(challenge.type === "SELECT" || challenge.type === "ASSIST") && (
+                  <ChallengeComponent
+                    key={challenge.id}
+                    options={options}
+                    onSelect={onSelect}
+                    status={status}
+                    selectedOption={selectedOption}
+                    disabled={pending}
+                    type={challenge.type}
+                    activeCourse={activeCourse}
+                  />
+                )}
 
-              {challenge.type === "TYPE_ANSWER" && (
-                <TypeAnswerChallenge
-                  question={challenge.question}
-                  correctAnswer={options.find((o) => o.correct)?.text ?? ""}
-                  status={status}
-                  disabled={pending}
-                  onAnswerChange={setTypedAnswer}
-                />
-              )}
+                {challenge.type === "TYPE_ANSWER" && (
+                  <TypeAnswerChallenge
+                    key={challenge.id}
+                    question={challenge.question}
+                    correctAnswer={options.find((o) => o.correct)?.text ?? ""}
+                    status={status}
+                    disabled={pending}
+                    onAnswerChange={setTypedAnswer}
+                  />
+                )}
 
-              {challenge.type === "MATCH_PAIRS" && (
-                <MatchPairsChallenge
-                  options={options}
-                  status={status}
-                  disabled={pending || status !== "none"}
-                  onComplete={(allMatched) => {
-                    setMatchPairsComplete(allMatched);
-                  }}
-                  onWrongPair={() => {
-                    startTransition(() => {
-                      reduceHearts(challenge.id)
-                        .then((response) => {
-                          if (response?.error === "hearts") {
-                            openHeartsModal();
-                            return;
-                          }
-                          if (!response?.error) {
-                            setHearts((prev) => Math.max(prev - 1, 0));
-                          }
-                        })
-                        .catch(() => toast.error("Something went wrong. Please try again."));
-                    });
-                  }}
-                />
-              )}
+                {challenge.type === "MATCH_PAIRS" && (
+                  <MatchPairsChallenge
+                    key={challenge.id}
+                    options={options}
+                    status={status}
+                    disabled={pending || status !== "none"}
+                    onComplete={(allMatched) => {
+                      setMatchPairsComplete(allMatched);
+                    }}
+                    onWrongPair={() => {
+                      startTransition(() => {
+                        reduceHearts(challenge.id)
+                          .then((response) => {
+                            if (response?.error === "hearts") {
+                              openHeartsModal();
+                              return;
+                            }
+                            if (!response?.error) {
+                              setHearts((prev) => Math.max(prev - 1, 0));
+                            }
+                          })
+                          .catch(() => toast.error("Something went wrong. Please try again."));
+                      });
+                    }}
+                  />
+                )}
+
+                {challenge.type === "FILL_IN_BLANKS" && (
+                  <FillInBlanksChallenge
+                    key={challenge.id}
+                    question={challenge.question}
+                    options={options}
+                    onSelect={onSelect}
+                    status={status}
+                    selectedOption={selectedOption}
+                    disabled={pending}
+                  />
+                )}
+
+                {challenge.type === "WORD_BANK" && (
+                  <WordBankChallenge
+                    key={challenge.id}
+                    options={options}
+                    status={status}
+                    disabled={pending}
+                    onChange={setTypedAnswer}
+                    question={challenge.question}
+                  />
+                )}
+              </div>
             </div>
           </div>
         </div>
+        <Footer
+          disabled={pending || !hasAnswer()}
+          status={status}
+          onCheck={onContinue}
+          onSkip={onSkip}
+          hideCheck={challenge.type === "MATCH_PAIRS" && !matchPairsComplete}
+        />
       </div>
-      <Footer
-        disabled={pending || (!hasAnswer() && status === "none")}
-        status={status}
-        onCheck={onContinue}
-        hideCheck={challenge.type === "MATCH_PAIRS" && !matchPairsComplete}
-      />
     </>
   );
 };

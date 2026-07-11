@@ -6,34 +6,26 @@ import { SidebarItem } from "./sidebar-item";
 type Props = { className?: string };
 
 const NAV_ITEMS = [
-  { label: "LEARN",       href: "/learn",       iconSrc: "/learn.svg"       },
-  { label: "LEADERBOARD", href: "/leaderboard", iconSrc: "/leaderboard.svg" },
-  { label: "QUESTS",      href: "/quests",      iconSrc: "/quests.svg"      },
-  { label: "SHOP",        href: "/shop",        iconSrc: "/shop.svg"        },
-  { label: "PROFILE",     href: "/profile",     iconSrc: "/quests.svg"      },
+  { label: "LEARN",        href: "/learn",        iconSrc: "/learn.svg"       },
+  { label: "LEADERBOARDS", href: "/leaderboard",  iconSrc: "/leaderboard.svg" },
+  { label: "QUESTS",       href: "/quests",       iconSrc: "/quests.svg"      },
+  { label: "SHOP",         href: "/shop",         iconSrc: "/shop.svg"        },
+  { label: "PROFILE",      href: "/profile",      iconSrc: "/quests.svg"      },
+  { label: "MORE",         href: "/settings",     iconSrc: "/more.svg"        },
 ];
 
 export const Sidebar = ({ className }: Props) => {
   return (
     <div className={cn(
       "flex h-full md:w-[256px] md:fixed left-0 top-0",
-      "flex-col border-r-2 border-gray-100 bg-white",
+      "flex-col border-r-2 border-gray-100 bg-white dark:bg-slate-900 dark:border-slate-800 dark:text-neutral-200",
       className,
     )}>
       {/* Logo */}
       <Link href="/learn" className="group px-6">
-        <div className="py-7 flex items-center gap-x-3">
-          <div className="relative flex-shrink-0">
-            <Image
-              src="/mascot.svg"
-              height={44}
-              width={44}
-              alt="Duo"
-              className="transition-transform group-hover:scale-110 duration-200 drop-shadow-sm"
-            />
-          </div>
-          <span className="text-2xl font-black text-[#58CC02] tracking-wide">
-            lingo
+        <div className="py-7 flex items-center pl-4">
+          <span className="text-3xl font-black text-[#58CC02] tracking-tighter">
+            duolingo
           </span>
         </div>
       </Link>

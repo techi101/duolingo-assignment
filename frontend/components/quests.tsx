@@ -12,14 +12,15 @@ type Props = {
 export const Quests = ({ points }: Props) => {
   return (
     <div className="border-2 rounded-xl p-4 space-y-4">
-      <div className="flex items-center justify-between w-full space-y-2">
-        <h3 className="font-bold text-lg">
-          Quests
+      <div className="flex items-center justify-between w-full space-y-2 mb-2">
+        <h3 className="font-bold text-lg text-neutral-800">
+          Daily Quests
         </h3>
         <Link href="/quests">
           <Button
             size="sm"
-            variant="primaryOutline"
+            variant="ghost"
+            className="text-[#1CB0F6] font-bold uppercase tracking-wider hover:bg-transparent hover:text-[#1899D6]"
           >
             View all
           </Button>
@@ -35,10 +36,10 @@ export const Quests = ({ points }: Props) => {
               key={quest.title}
             >
               <Image
-                src="/points.svg"
+                src="/gem.svg"
                 alt="Points"
-                width={40}
-                height={40}
+                width={32}
+                height={32}
               />
               <div className="flex flex-col gap-y-2 w-full">
                 <p className="text-neutral-700 text-sm font-bold">

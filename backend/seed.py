@@ -1,5 +1,5 @@
 """
-Seed script – wipes DB and re-populates with a full Spanish course.
+Seed script – wipes DB and re-populates with Spanish, English, and French courses.
 Run: py seed.py  (with venv active, from the backend/ folder)
 """
 from models import (
@@ -19,31 +19,28 @@ db = Session()
 # ── Course ───────────────────────────────────────────────────────────────────
 spanish = Course(title="Spanish", image_src="/es.svg")
 english = Course(title="English", image_src="/en.svg")
-db.add_all([spanish, english])
+french = Course(title="French", image_src="/fr.svg")
+db.add_all([spanish, english, french])
 db.flush()
 
 # ── Units ────────────────────────────────────────────────────────────────────
 unit1 = Unit(title="Unit 1", description="Learn the basics of Spanish", order=1, course_id=spanish.id)
-unit2 = Unit(title="Unit 2", description="Greetings and phrases",       order=2, course_id=spanish.id)
-unit3 = Unit(title="Unit 3", description="Numbers and daily life",      order=3, course_id=spanish.id)
-
 en_unit1 = Unit(title="Unit 1", description="Learn the basics of English", order=1, course_id=english.id)
-db.add_all([unit1, unit2, unit3, en_unit1])
+fr_unit1 = Unit(title="Unit 1", description="Learn the basics of French", order=1, course_id=french.id)
+db.add_all([unit1, en_unit1, fr_unit1])
 db.flush()
 
 # ── Lessons ──────────────────────────────────────────────────────────────────
 lesson1 = Lesson(title="Introductions", order=1, unit_id=unit1.id)
 lesson2 = Lesson(title="Animals",       order=2, unit_id=unit1.id)
-lesson3 = Lesson(title="Colors",        order=3, unit_id=unit1.id)
-lesson4 = Lesson(title="Greetings",     order=1, unit_id=unit2.id)
-lesson5 = Lesson(title="Food",          order=2, unit_id=unit2.id)
-lesson6 = Lesson(title="Numbers",       order=1, unit_id=unit3.id)
-lesson7 = Lesson(title="Family",        order=2, unit_id=unit3.id)
 
 en_lesson1 = Lesson(title="Food",       order=1, unit_id=en_unit1.id)
 en_lesson2 = Lesson(title="Animals",    order=2, unit_id=en_unit1.id)
 
-db.add_all([lesson1, lesson2, lesson3, lesson4, lesson5, lesson6, lesson7, en_lesson1, en_lesson2])
+fr_lesson1 = Lesson(title="Animals",    order=1, unit_id=fr_unit1.id)
+fr_lesson2 = Lesson(title="Food",       order=2, unit_id=fr_unit1.id)
+
+db.add_all([lesson1, lesson2, en_lesson1, en_lesson2, fr_lesson1, fr_lesson2])
 db.flush()
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
@@ -64,151 +61,111 @@ def make_assist(db, lesson_id, question, options, order):
     for text, correct in options:
         db.add(ChallengeOption(challenge_id=c.id, text=text, correct=correct))
 
-def make_type_answer(db, lesson_id, question, answer, order):
-    """Free-text type-the-answer challenge. Single option = the correct answer."""
+def make_type_answer(db, lesson_id, question, correct_answer, order):
     c = Challenge(lesson_id=lesson_id, type="TYPE_ANSWER", question=question, order=order)
     db.add(c); db.flush()
-    db.add(ChallengeOption(challenge_id=c.id, text=answer, correct=True))
+    db.add(ChallengeOption(challenge_id=c.id, text=correct_answer, correct=True))
 
 def make_match_pairs(db, lesson_id, question, pairs, order):
-    """
-    Match-pairs challenge.
-    pairs = list of (word, translation) — both stored as options.
-    Format: text = "word|||translation", correct = True (all options are valid pairs)
-    """
     c = Challenge(lesson_id=lesson_id, type="MATCH_PAIRS", question=question, order=order)
     db.add(c); db.flush()
     for word, translation in pairs:
         db.add(ChallengeOption(challenge_id=c.id, text=f"{word}|||{translation}", correct=True))
 
-# ── Lesson 1: Introductions ───────────────────────────────────────────────────
+def make_fill_in_blanks(db, lesson_id, question, options, order):
+    c = Challenge(lesson_id=lesson_id, type="FILL_IN_BLANKS", question=question, order=order)
+    db.add(c); db.flush()
+    for text, correct in options:
+        db.add(ChallengeOption(challenge_id=c.id, text=text, correct=correct))
+
+def make_word_bank(db, lesson_id, question, correct_answer, distractors, order):
+    c = Challenge(lesson_id=lesson_id, type="WORD_BANK", question=question, order=order)
+    db.add(c); db.flush()
+    db.add(ChallengeOption(challenge_id=c.id, text=correct_answer, correct=True))
+    for d in distractors:
+        db.add(ChallengeOption(challenge_id=c.id, text=d, correct=False))
+
+# ── Spanish Lesson 1: Introductions (Highly Mixed) ───────────────────────────
 make_select(db, lesson1.id, "Which means 'the man'?",
-    [("el hombre", True), ("la mujer", False), ("el niño", False), ("la chica", False)], 1)
-make_select(db, lesson1.id, "Which means 'the woman'?",
-    [("el hombre", False), ("la mujer", True), ("el robot", False), ("el niño", False)], 2)
+    [("el hombre", True, "/man.svg"), ("la mujer", False, "/woman.svg"), ("el niño", False, "/boy.svg"), ("la niña", False, "/girl.svg")], 1)
+make_fill_in_blanks(db, lesson1.id, "The word for woman is ____",
+    [("la mujer", True), ("el hombre", False), ("la niña", False), ("el niño", False)], 2)
 make_assist(db, lesson1.id, "el hombre",
     [("the man", True), ("the woman", False), ("the boy", False)], 3)
 make_type_answer(db, lesson1.id, "Type the Spanish word for 'hello'", "hola", 4)
-make_assist(db, lesson1.id, "la mujer",
-    [("the man", False), ("the woman", True), ("the girl", False)], 5)
+make_word_bank(db, lesson1.id, "UNCLE|Write this in English|un café", "a coffee", ["please", "milk", "tea"], 5)
 make_match_pairs(db, lesson1.id, "Match the pairs!",
     [("el hombre", "the man"), ("la mujer", "the woman"), ("el niño", "the boy"), ("la niña", "the girl")], 6)
 
-# ── Lesson 2: Animals ─────────────────────────────────────────────────────────
+# ── Spanish Lesson 2: Animals (Highly Mixed) ─────────────────────────────────
 make_select(db, lesson2.id, "Which means 'the cat'?",
-    [("el gato", True, "/cat.svg"), ("el perro", False, "/dog.svg")], 1)
-make_select(db, lesson2.id, "Which means 'the dog'?",
-    [("el gato", False, "/cat.svg"), ("el perro", True, "/dog.svg")], 2)
+    [("el gato", True, "/cat.svg"), ("el perro", False, "/dog.svg"), ("el pájaro", False, "/bird.svg"), ("el pez", False, "/fish.svg")], 1)
+make_fill_in_blanks(db, lesson2.id, "The word for dog is ____",
+    [("el perro", True), ("el gato", False), ("el pez", False), ("el pájaro", False)], 2)
 make_assist(db, lesson2.id, "el pájaro",
     [("the bird", True), ("the fish", False), ("the cat", False)], 3)
 make_type_answer(db, lesson2.id, "Type the Spanish word for 'the dog'", "el perro", 4)
+make_word_bank(db, lesson2.id, "BEAR|Write this in English|el gato", "the cat", ["dog", "a", "bird", "fish"], 5)
 make_match_pairs(db, lesson2.id, "Match the animals!",
-    [("el gato", "cat"), ("el perro", "dog"), ("el pájaro", "bird"), ("el pez", "fish")], 5)
+    [("el gato", "the cat"), ("el perro", "the dog"), ("el pájaro", "the bird"), ("el pez", "the fish")], 6)
 
-# ── Lesson 3: Colors ──────────────────────────────────────────────────────────
-make_select(db, lesson3.id, "Which means 'red'?",
-    [("rojo", True), ("azul", False), ("verde", False), ("amarillo", False)], 1)
-make_select(db, lesson3.id, "Which means 'blue'?",
-    [("rojo", False), ("azul", True), ("negro", False), ("blanco", False)], 2)
-make_assist(db, lesson3.id, "verde",
-    [("green", True), ("red", False), ("yellow", False)], 3)
-make_type_answer(db, lesson3.id, "Type the Spanish word for 'yellow'", "amarillo", 4)
-make_match_pairs(db, lesson3.id, "Match the colors!",
-    [("rojo", "red"), ("azul", "blue"), ("verde", "green"), ("amarillo", "yellow")], 5)
-
-# ── Lesson 4: Greetings ───────────────────────────────────────────────────────
-make_select(db, lesson4.id, "Which means 'hello'?",
-    [("hola", True), ("adiós", False), ("gracias", False), ("por favor", False)], 1)
-make_select(db, lesson4.id, "Which means 'goodbye'?",
-    [("hola", False), ("adiós", True), ("buenos días", False), ("buenas noches", False)], 2)
-make_assist(db, lesson4.id, "gracias",
-    [("thank you", True), ("please", False), ("hello", False)], 3)
-make_type_answer(db, lesson4.id, "Type the Spanish word for 'please'", "por favor", 4)
-make_select(db, lesson4.id, "Which means 'good morning'?",
-    [("buenos días", True), ("buenas noches", False), ("buenas tardes", False), ("hola", False)], 5)
-
-# ── Lesson 5: Food ────────────────────────────────────────────────────────────
-make_select(db, lesson5.id, "Which means 'the apple'?",
-    [("la manzana", True, "/apple.svg"), ("el pan", False, "/bread.svg"), ("el agua", False, "/water.svg")], 1)
-make_select(db, lesson5.id, "Which means 'the bread'?",
-    [("la manzana", False, "/apple.svg"), ("el pan", True, "/bread.svg"), ("la leche", False, "/milk.svg")], 2)
-make_assist(db, lesson5.id, "el agua",
-    [("the water", True), ("the milk", False), ("the juice", False)], 3)
-make_type_answer(db, lesson5.id, "Type the Spanish word for 'milk'", "la leche", 4)
-make_match_pairs(db, lesson5.id, "Match the foods!",
-    [("la manzana", "apple"), ("el pan", "bread"), ("el agua", "water"), ("la leche", "milk")], 5)
-
-# ── Lesson 6: Numbers ─────────────────────────────────────────────────────────
-make_select(db, lesson6.id, "Which means 'one'?",
-    [("uno", True), ("dos", False), ("tres", False), ("cuatro", False)], 1)
-make_select(db, lesson6.id, "Which means 'five'?",
-    [("tres", False), ("cuatro", False), ("cinco", True), ("seis", False)], 2)
-make_type_answer(db, lesson6.id, "Type the Spanish word for 'ten'", "diez", 3)
-make_match_pairs(db, lesson6.id, "Match the numbers!",
-    [("uno", "one"), ("dos", "two"), ("tres", "three"), ("cuatro", "four"), ("cinco", "five")], 4)
-
-# ── Lesson 7: Family ─────────────────────────────────────────────────────────
-make_select(db, lesson7.id, "Which means 'mother'?",
-    [("la madre", True), ("el padre", False), ("el hermano", False), ("la hermana", False)], 1)
-make_assist(db, lesson7.id, "el padre",
-    [("the father", True), ("the mother", False), ("the brother", False)], 2)
-make_type_answer(db, lesson7.id, "Type the Spanish word for 'brother'", "el hermano", 3)
-make_match_pairs(db, lesson7.id, "Match the family members!",
-    [("la madre", "mother"), ("el padre", "father"), ("el hermano", "brother"), ("la hermana", "sister")], 4)
-
-# ── ENGLISH COURSE (New) ─────────────────────────────────────────────────────
+# ── English Lesson 1: Food (Highly Mixed) ────────────────────────────────────
 make_select(db, en_lesson1.id, "Which means 'the apple'?",
-    [("the apple", True, "/apple.svg"), ("the bread", False, "/bread.svg")], 1)
-make_select(db, en_lesson1.id, "Which means 'the bread'?",
-    [("the apple", False, "/apple.svg"), ("the bread", True, "/bread.svg")], 2)
-make_match_pairs(db, en_lesson1.id, "Match the pairs!",
-    [("apple", "manzana"), ("bread", "pan"), ("water", "agua"), ("milk", "leche")], 3)
+    [("the apple", True, "/apple.svg"), ("the bread", False, "/bread.svg"), ("the water", False, "/water.svg"), ("the milk", False, "/milk.svg")], 1)
+make_fill_in_blanks(db, en_lesson1.id, "The word for bread is ____",
+    [("the bread", True), ("the apple", False), ("the water", False), ("the milk", False)], 2)
+make_type_answer(db, en_lesson1.id, "Type the English word for 'water'", "water", 4)
+make_word_bank(db, en_lesson1.id, "AUNT|Write this in Spanish|an apple", "una manzana", ["bread", "water", "boy"], 5)
+make_match_pairs(db, en_lesson1.id, "Match the food!",
+    [("the apple", "la manzana"), ("the bread", "el pan"), ("the milk", "la leche"), ("the water", "el agua")], 6)
 
+# ── English Lesson 2: Animals (Highly Mixed) ─────────────────────────────────
 make_select(db, en_lesson2.id, "Which means 'the cat'?",
-    [("the cat", True, "/cat.svg"), ("the dog", False, "/dog.svg")], 1)
-make_select(db, en_lesson2.id, "Which means 'the dog'?",
-    [("the cat", False, "/cat.svg"), ("the dog", True, "/dog.svg")], 2)
-make_match_pairs(db, en_lesson2.id, "Match the pairs!",
-    [("cat", "gato"), ("dog", "perro"), ("bird", "pájaro"), ("fish", "pez")], 3)
+    [("the cat", True, "/cat.svg"), ("the dog", False, "/dog.svg"), ("the bird", False, "/bird.svg"), ("the fish", False, "/fish.svg")], 1)
+make_fill_in_blanks(db, en_lesson2.id, "The word for dog is ____",
+    [("the dog", True), ("the cat", False), ("the bird", False), ("the fish", False)], 2)
+make_type_answer(db, en_lesson2.id, "Type the English word for 'bird'", "bird", 3)
+make_word_bank(db, en_lesson2.id, "BIRD|Write this in Spanish|a cat", "un gato", ["dog", "fish", "bird", "apple"], 4)
+make_match_pairs(db, en_lesson2.id, "Match the animals!",
+    [("cat", "gato"), ("dog", "perro"), ("bird", "pájaro"), ("fish", "pez")], 5)
 
-# ── Users (learner + leaderboard seeds) ──────────────────────────────────────
-today = datetime.date.today()
-yesterday = today - datetime.timedelta(days=1)
+# ── French Lesson 1: Animals (Highly Mixed) ──────────────────────────────────
+make_select(db, fr_lesson1.id, "Which means 'the cat'?",
+    [("le chat", True, "/cat.svg"), ("le chien", False, "/dog.svg"), ("l'oiseau", False, "/bird.svg"), ("le poisson", False, "/fish.svg")], 1)
+make_fill_in_blanks(db, fr_lesson1.id, "The word for dog is ____",
+    [("le chien", True), ("le chat", False), ("le poisson", False), ("l'oiseau", False)], 2)
+make_type_answer(db, fr_lesson1.id, "Type the French word for 'the cat'", "le chat", 4)
+make_word_bank(db, fr_lesson1.id, "UNCLE|Write this in English|le chat", "the cat", ["dog", "bird", "fish", "please"], 5)
+make_match_pairs(db, fr_lesson1.id, "Match the animals!",
+    [("le chat", "the cat"), ("le chien", "the dog"), ("l'oiseau", "the bird"), ("le poisson", "the fish")], 6)
 
+# ── French Lesson 2: Food (Highly Mixed) ─────────────────────────────────────
+make_select(db, fr_lesson2.id, "Which means 'the apple'?",
+    [("la pomme", True, "/apple.svg"), ("le pain", False, "/bread.svg"), ("l'eau", False, "/water.svg"), ("le lait", False, "/milk.svg")], 1)
+make_fill_in_blanks(db, fr_lesson2.id, "The word for bread is ____",
+    [("le pain", True), ("la pomme", False), ("l'eau", False), ("le lait", False)], 2)
+make_type_answer(db, fr_lesson2.id, "Type the French word for 'milk'", "le lait", 3)
+make_match_pairs(db, fr_lesson2.id, "Match the pairs!",
+    [("pomme", "apple"), ("pain", "bread"), ("eau", "water"), ("lait", "milk")], 4)
+
+
+# ── Leaderboard Users (Mock) ─────────────────────────────────────────────────
 users_data = [
-    ("Learner",  "/avatars/1.svg",  120, 7,  5, spanish.id, yesterday),
-    ("Alice",    "/avatars/2.svg",  980, 14, 5, spanish.id, today),
-    ("Bob",      "/avatars/3.svg",  760, 10, 4, spanish.id, yesterday),
-    ("Carlos",   "/avatars/4.svg",  540, 5,  5, spanish.id, today),
-    ("Diana",    "/avatars/5.svg",  430, 3,  3, spanish.id, yesterday),
-    ("Eve",      "/avatars/6.svg",  320, 2,  5, spanish.id, today),
-    ("Frank",    "/avatars/7.svg",  210, 1,  4, spanish.id, None),
-    ("Grace",    "/avatars/8.svg",  150, 8,  5, spanish.id, yesterday),
-    ("Henry",    "/avatars/9.svg",   90, 4,  2, spanish.id, None),
-    ("Ivy",      "/avatars/10.svg",  50, 1,  5, spanish.id, today),
+    ("Nolan", 120, "/mascot.svg"),
+    ("Sarah", 95, "/girl.svg"),
+    ("James", 80, "/boy.svg"),
+    ("Emily", 150, "/woman.svg"),
+    ("Michael", 40, "/man.svg"),
+    ("Anna", 200, "/girl.svg"),
+    ("David", 10, "/boy.svg"),
+    ("Sophia", 60, "/woman.svg"),
+    ("Robert", 110, "/man.svg"),
+    ("Olivia", 180, "/girl.svg")
 ]
-
-created_users = []
-for username, img, xp, streak, hearts, course_id, last_date in users_data:
-    u = User(
-        username=username, user_image_src=img, xp=xp, streak=streak,
-        hearts=hearts, active_course_id=course_id, last_active_date=last_date
-    )
+for name, xp, img in users_data:
+    u = User(username=name, xp=xp, hearts=5, active_course_id=spanish.id, user_image_src=img, streak=7, last_active_date=datetime.date.today())
     db.add(u)
-    created_users.append(u)
-
 db.flush()
 
-# Mark lesson 1 + 2 complete for the main learner (so they start at lesson 3)
-main_user = created_users[0]
-for lesson in [lesson1, lesson2]:
-    db.add(UserProgress(user_id=main_user.id, lesson_id=lesson.id, completed=True, score=80))
-    for challenge in lesson.challenges:
-        db.add(ChallengeProgress(user_id=main_user.id, challenge_id=challenge.id, completed=True))
-
 db.commit()
-db.close()
-print("Database seeded successfully!")
-print(f"   - 1 course (Spanish) with 3 units, 7 lessons, varied challenge types")
-print(f"   - Challenge types: SELECT, ASSIST, TYPE_ANSWER, MATCH_PAIRS")
-print(f"   - {len(users_data)} users seeded (leaderboard ready)")
+print("Database seeded successfully with Spanish, English, and French mixed lessons!")

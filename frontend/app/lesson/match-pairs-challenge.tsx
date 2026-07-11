@@ -38,14 +38,30 @@ export const MatchPairsChallenge = ({ options, status, disabled, onComplete, onW
 
   const correctMap = new Map(pairs.map((p) => [p.word, p.translation]));
 
-  useEffect(() => {
-    if (selectedLeft && selectedRight) {
-      const isCorrect = correctMap.get(selectedLeft) === selectedRight;
+  const handleSelect = (side: "left" | "right", value: string) => {
+    // If already waiting for an incorrect pair to clear, do nothing
+    if (incorrectPair) return;
+
+    let newLeft = selectedLeft;
+    let newRight = selectedRight;
+
+    if (side === "left") {
+      if (selectedLeft === value) newLeft = null;
+      else newLeft = value;
+      setSelectedLeft(newLeft);
+    } else {
+      if (selectedRight === value) newRight = null;
+      else newRight = value;
+      setSelectedRight(newRight);
+    }
+
+    if (newLeft && newRight) {
+      const isCorrect = correctMap.get(newLeft) === newRight;
       if (isCorrect) {
         correctControls.play();
         setMatched((prev) => {
           const next = new Set(prev);
-          next.add(selectedLeft);
+          next.add(newLeft!);
           if (next.size === pairs.length) {
             onComplete(true);
           }
@@ -56,7 +72,7 @@ export const MatchPairsChallenge = ({ options, status, disabled, onComplete, onW
       } else {
         incorrectControls.play();
         onWrongPair();
-        setIncorrectPair({ left: selectedLeft, right: selectedRight });
+        setIncorrectPair({ left: newLeft, right: newRight });
         
         setTimeout(() => {
           setIncorrectPair(null);
@@ -65,7 +81,7 @@ export const MatchPairsChallenge = ({ options, status, disabled, onComplete, onW
         }, 800);
       }
     }
-  }, [selectedLeft, selectedRight, correctMap, pairs.length, onComplete, correctControls, incorrectControls, onWrongPair]);
+  };
 
   const isWordMatched = (word: string) => matched.has(word);
   const isTranslationMatched = (trans: string) =>
@@ -84,7 +100,7 @@ export const MatchPairsChallenge = ({ options, status, disabled, onComplete, onW
             <button
               key={word}
               disabled={disabled || isMatched || !!incorrectPair}
-              onClick={() => !isMatched && setSelectedLeft(isSelected ? null : word)}
+              onClick={() => !isMatched && handleSelect("left", word)}
               className={cn(
                 "relative px-4 py-3 rounded-2xl border-2 border-b-4 font-bold text-sm transition-all duration-150",
                 "hover:scale-[1.02] active:scale-[0.98] active:border-b-2",
@@ -115,7 +131,7 @@ export const MatchPairsChallenge = ({ options, status, disabled, onComplete, onW
             <button
               key={trans}
               disabled={disabled || isMatched || !!incorrectPair}
-              onClick={() => !isMatched && setSelectedRight(isSelected ? null : trans)}
+              onClick={() => !isMatched && handleSelect("right", trans)}
               className={cn(
                 "px-4 py-3 rounded-2xl border-2 border-b-4 font-bold text-sm transition-all duration-150",
                 "hover:scale-[1.02] active:scale-[0.98] active:border-b-2",

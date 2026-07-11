@@ -42,11 +42,11 @@ export const UserProgress = ({
         </div>
       </Link>
 
-      {/* Lightning / XP */}
+      {/* Gems */}
       <Link href="/shop">
         <div className="flex items-center gap-x-1 group cursor-pointer hover:opacity-80 transition-opacity">
-          <Image src="/points.svg" height={24} width={24} alt="XP" className="group-hover:scale-110 transition-transform" />
-          <span className="font-black text-[#FFD900] text-base tabular-nums">{points}</span>
+          <Image src="/gem.svg" height={28} width={28} alt="Gems" className="group-hover:scale-110 transition-transform" />
+          <span className="font-black text-[#1CB0F6] text-base tabular-nums">{points}</span>
         </div>
       </Link>
 

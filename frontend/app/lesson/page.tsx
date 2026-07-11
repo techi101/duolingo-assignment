@@ -9,6 +9,9 @@ const LessonPage = async () => {
   const userProgressData = getUserProgress();
   const userSubscriptionData = getUserSubscription();
 
+  // Artificial delay so the beautiful loading screen is visible!
+  await new Promise(resolve => setTimeout(resolve, 2500));
+
   const [
     lesson,
     userProgress,
@@ -34,6 +37,7 @@ const LessonPage = async () => {
       initialHearts={userProgress.hearts}
       initialPercentage={initialPercentage}
       userSubscription={userSubscription}
+      activeCourse={userProgress.activeCourse}
     />
   );
 };

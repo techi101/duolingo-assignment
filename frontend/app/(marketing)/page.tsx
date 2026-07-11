@@ -87,13 +87,21 @@ export default function Home() {
       <section className="py-10 px-6 bg-white border-t-2 border-gray-100">
         <div className="max-w-5xl mx-auto text-center">
           <p className="text-[#AFAFAF] font-bold text-xs uppercase tracking-widest mb-6">
-            Available Language
+            Available Languages
           </p>
-          <div className="flex items-center justify-center">
-            <div className="flex items-center gap-3 px-6 py-3 rounded-2xl border-2 border-gray-100 hover:border-gray-200 transition-colors cursor-pointer">
-              <Image src="/spain.svg" alt="Spanish" width={40} height={28} className="rounded-md shadow-sm" />
-              <span className="font-extrabold text-[#3C3C3C]">Spanish</span>
-            </div>
+          <div className="flex items-center justify-center gap-4 flex-wrap">
+            <Link href="/courses">
+              <div className="flex items-center gap-3 px-6 py-3 rounded-2xl border-2 border-gray-100 hover:border-gray-200 transition-colors cursor-pointer">
+                <Image src="/es.svg" alt="Spanish" width={40} height={28} className="rounded-md shadow-sm" />
+                <span className="font-extrabold text-[#3C3C3C]">Spanish</span>
+              </div>
+            </Link>
+            <Link href="/courses">
+              <div className="flex items-center gap-3 px-6 py-3 rounded-2xl border-2 border-gray-100 hover:border-gray-200 transition-colors cursor-pointer">
+                <Image src="/en.svg" alt="English" width={40} height={28} className="rounded-md shadow-sm" />
+                <span className="font-extrabold text-[#3C3C3C]">English</span>
+              </div>
+            </Link>
           </div>
         </div>
       </section>

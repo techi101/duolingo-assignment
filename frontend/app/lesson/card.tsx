@@ -4,6 +4,7 @@ import { useAudio, useKey } from "react-use";
 
 import { cn } from "@/lib/utils";
 import { challenges } from "@/db/schema";
+import { useSettings } from "@/store/use-settings";
 
 type Props = {
   id: number;
@@ -14,8 +15,9 @@ type Props = {
   selected?: boolean;
   onClick: () => void;
   disabled?: boolean;
-  status?: "correct" | "wrong" | "none",
+  status?: "correct" | "wrong" | "none";
   type: typeof challenges.$inferSelect["type"];
+  activeCourse?: { title: string };
 };
 
 export const Card = ({
@@ -29,8 +31,10 @@ export const Card = ({
   status,
   disabled,
   type,
+  activeCourse,
 }: Props) => {
   const [audio, _, controls] = useAudio({ src: audioSrc || "" });
+  const { voicePreferences } = useSettings();
 
   const handleClick = useCallback(() => {
     if (disabled) return;
@@ -39,11 +43,31 @@ export const Card = ({
       controls.play();
     } else {
       const utterance = new SpeechSynthesisUtterance(text);
+      if (activeCourse) {
+        // Map course title (e.g. "Spanish") to the language code ("es")
+        const langMap: Record<string, string> = {
+          "Spanish": "es",
+          "English": "en",
+          "French": "fr"
+        };
+        const langCode = langMap[activeCourse.title];
+        if (langCode) {
+          utterance.lang = langCode;
+          if (voicePreferences[langCode]) {
+            const prefURI = voicePreferences[langCode];
+            const voices = window.speechSynthesis.getVoices();
+            const voice = voices.find(v => v.voiceURI === prefURI);
+            if (voice) {
+              utterance.voice = voice;
+            }
+          }
+        }
+      }
       window.speechSynthesis.speak(utterance);
     }
 
     onClick();
-  }, [disabled, onClick, controls, audioSrc, text]);
+  }, [disabled, onClick, controls, audioSrc, text, activeCourse, voicePreferences]);
 
   useKey(shortcut, handleClick, {}, [handleClick]);
 

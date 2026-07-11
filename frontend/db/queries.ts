@@ -14,7 +14,7 @@ export type ChallengeOption = {
 
 export type Challenge = {
   id: number; lessonId: number;
-  type: "SELECT" | "ASSIST" | "TYPE_ANSWER" | "MATCH_PAIRS";
+  type: "SELECT" | "ASSIST" | "TYPE_ANSWER" | "MATCH_PAIRS" | "FILL_IN_BLANKS" | "WORD_BANK";
   question: string; order: number; completed: boolean;
   challengeOptions: ChallengeOption[];
 };

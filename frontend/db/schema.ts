@@ -37,7 +37,7 @@ export const challenges = {
   $inferSelect: {} as {
     id: number;
     lessonId: number;
-    type: "SELECT" | "ASSIST" | "TYPE_ANSWER" | "MATCH_PAIRS";
+    type: "SELECT" | "ASSIST" | "TYPE_ANSWER" | "MATCH_PAIRS" | "FILL_IN_BLANKS" | "WORD_BANK";
     question: string;
     order: number;
   },
