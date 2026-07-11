@@ -1,35 +1,31 @@
-# Duolingo Clone
+# 🦉 Duolingo Clone
 
-A full-stack, highly interactive Duolingo clone featuring gamified language learning, interactive lessons, persistent progress tracking, and a playful UI.
+A full-stack, highly interactive language learning application that recreates the core Duolingo experience, featuring a gamified path, an interactive lesson engine, and persistent user progress.
 
-## Tech Stack
-- **Frontend**: Next.js 16 (App Router), React, Tailwind CSS, Zustand (state management), Radix UI (accessible components).
-- **Backend**: FastAPI (Python), SQLAlchemy (ORM).
-- **Database**: SQLite (local development).
+> **Live Demo:** [https://duolingo-clone-82wghhfts-techi101s-projects.vercel.app](https://duolingo-clone-82wghhfts-techi101s-projects.vercel.app)
+> **GitHub Repository:** [https://github.com/techi101/duolingo-assignment](https://github.com/techi101/duolingo-assignment)
 
-## Core Features Implemented
-- **Learning Path**: Visual SVG-based tree with locked/unlocked progress states.
-- **Interactive Lessons**: Supports Multiple Choice (with images), Translation, Type-the-Answer, and Match-the-Pairs exercises. Includes native Text-to-Speech (TTS) integration.
-- **Gamification**: Real-time streak tracking, XP accumulation, daily quests, and heart mechanics (lose a heart on failure, regain by practicing or purchasing with XP).
-- **Social & Profile**: Dynamic leaderboard tracking all users, and a robust Profile page featuring unlockable achievements.
-- **Responsive UI**: Pixel-perfect UI recreating the authentic Duolingo experience on both desktop and mobile devices.
+---
 
-## Architecture Overview
-The application follows a decoupled client-server architecture:
-1. **Frontend**: A Next.js application that handles rendering, client-side state (Zustand), and complex animations (React-Confetti). It uses Server Actions and standard `fetch` calls to communicate with the backend.
-2. **Backend**: A FastAPI server that provides RESTful endpoints to manage user states, validate lesson answers, and track progress.
-3. **Database**: A relational SQLite database accessed via SQLAlchemy.
+## 🎨 Visual Theme & Design
+The application utilizes a color palette inspired by Duolingo’s signature aesthetic:
+*   **Primary Green (`#58cc02`)**: Used for primary actions and progress bars.
+*   **Neutral Slate/Gray**: Used for structure, ensuring high contrast in both Light and Dark modes.
+*   **UI Patterns**: Rounded buttons, bouncy animations, and clear progress rings to mimic the authentic Duolingo experience.
 
-## Database Schema Design
-The database consists of tightly related entities designed to track granular user progress:
-- **User**: Stores username, XP, streak, hearts, active course, and last active date.
-- **Course**: The high-level language course (e.g., Spanish, English).
-- **Unit**: A subdivision of a course, containing a specific theme and order.
-- **Lesson**: A sequence of challenges within a unit.
-- **Challenge**: Individual exercises (SELECT, ASSIST, TYPE_ANSWER, MATCH_PAIRS).
-- **ChallengeOption**: The possible answers for a given challenge, marked with boolean correct flags and optional image/audio sources.
-- **UserProgress / ChallengeProgress**: Join tables that persistently track which lessons and specific challenges a user has completed, driving the visual lock/unlock path on the frontend.
+---
 
+## 🚀 Tech Stack
+*   **Frontend**: Next.js 16 (App Router), React, Tailwind CSS, Zustand, Radix UI.
+*   **Backend**: FastAPI (Python), SQLAlchemy (ORM).
+*   **Database**: SQLite (local development).
+
+## 🏗 Architecture Overview
+1. **Frontend**: Next.js handles server-side rendering and state changes via **Zustand**.
+2. **Backend**: **FastAPI** provides RESTful endpoints with **Pydantic** type validation.
+3. **Database**: Relational schema managed by **SQLAlchemy** to maintain hierarchical integrity.
+
+## 🗄 Database Schema
 ```mermaid
 erDiagram
     User ||--o{ UserProgress : "has"
@@ -41,6 +37,17 @@ erDiagram
     Challenge ||--o{ ChallengeOption : "has"
     Challenge ||--o{ ChallengeProgress : "tracked by"
 ```
+## 🔌 API Overview
+The FastAPI backend exposes several RESTful endpoints to manage courses, lessons, and user progress. 
+Key endpoints include:
+- `GET /courses`: Retrieves available language courses.
+- `GET /units`: Fetches units and lessons for the user's active course.
+- `GET /lessons/{lesson_id}`: Loads challenges (multiple choice, match, type) for a specific lesson.
+- `POST /challenge-progress`: Records completed challenges, awards XP, and updates streaks.
+- `GET /users/me` & `PUT /users/me`: Manages the current user's profile and avatar.
+- `GET /achievements`: Calculates and returns unlocked achievements based on user XP and streaks.
+- `POST /reduce-hearts` & `POST /refill-hearts`: Manages the gamified health system.
+- `GET /leaderboard`: Returns top users ranked by XP.
 
 ## Design Decisions & Trade-offs
 - **Next.js App Router**: Chosen for its seamless Server-Side Rendering (SSR) capabilities and integrated API routes, allowing for rapid frontend iteration and optimized page loads.
