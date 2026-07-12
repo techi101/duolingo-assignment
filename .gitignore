@@ -1,2 +1,15 @@
 .vercel
 .env*
+
+# Unused/tutorial code
+unused/
+
+# Database files
+*.db
+
+# Python
+__pycache__/
+*.pyc
+
+# Utility scripts
+make_svgs.js
